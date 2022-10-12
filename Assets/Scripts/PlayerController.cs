@@ -17,10 +17,6 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update () {
-        //getAxis使うんならこれ(ただし十字キーでも判定するようになる)
-        //var speed = 5.0f;
-        //var vx = speed * Input.GetAxis("Horizontal");
-        //var vz = speed * Input.GetAxis("Vertical");
         rv = new Vector3();
         //WASD押したら方向を代入
         if (Input.GetKey(KeyCode.A)) {
@@ -42,9 +38,6 @@ public class PlayerController : MonoBehaviour
                 Player.transform.position += Player.transform.forward * speed;
             }
         
-        //ここで動きを反映
-        //_rigidbody.velocity = new Vector3(rv.x,_rigidbody.velocity.y,rv.z);
-        //Player.transform.Translate(rv);
     }
     void FixedUpdate(){
         //カメラのxとzのベクトルを抽出
@@ -59,9 +52,6 @@ public class PlayerController : MonoBehaviour
         // キャラクターの向きを進行方向に
         if (moveForward != Vector3.zero) {
             Player.transform.rotation = Quaternion.LookRotation(moveForward);
-            //Quaternion tx = Quaternion.Euler(moveForward);
-            //Quaternion tt = tx * Quaternion.AngleAxis(90, Vector3.up);
-            //Player.transform.rotation = Quaternion.RotateTowards(transform.rotation, tt, rb.velocity.x*90);
         }
 
     }
