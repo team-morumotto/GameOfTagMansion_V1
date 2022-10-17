@@ -5,19 +5,29 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //ネット動作よくわからないので実体ポップできるようにコントローラー式にしてます
-    public GameObject Player; //追う対象 場合によってはfindで必要なもの探してください
+    [HideInInspector] public GameObject Player; //追う対象 場合によってはfindで必要なもの探してください
+    public GameObject player; //プレハブであってほしい
     private Rigidbody rb;
+    private GameObject stateM;
 
-    [SerializeField] private float speed = 0.1f;
-    [SerializeField] private float rotatespeed = 1f;
+    [SerializeField] private float initSpeed = 0.1f;
+    private float speed;
     private Vector3 rv; //入力値の格納用
     void Start () {
+        stateM = GameObject.Find("StateManeger");
+        Player = Instantiate(player);
         rb = Player.GetComponent<Rigidbody>();
         //Player = GameObject.Find("Player");
+        speed = initSpeed;
     }
 
     void Update () {
-        rv = new Vector3();
+        rv = new Vector3();        
+        if(stateM.GetComponent<StateManeger>().isSpeedUp == true){
+            speed = initSpeed * 2;
+            Debug.Log("ぬぬぬ");
+        }
+        
         //WASD押したら方向を代入
         if (Input.GetKey(KeyCode.A)) {
                 rv.x = -speed;
@@ -37,8 +47,8 @@ public class PlayerController : MonoBehaviour
                 rv.z = -speed;
                 Player.transform.position += Player.transform.forward * speed;
             }
-        
     }
+
     void FixedUpdate(){
         //カメラのxとzのベクトルを抽出
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;

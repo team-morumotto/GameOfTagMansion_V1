@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StateManeger : MonoBehaviour
 {
-    private bool isSpeedUp = false;
+    public bool isSpeedUp = false;
     private float WaitTime = 0;
     void Start()
     {
@@ -17,7 +17,14 @@ public class StateManeger : MonoBehaviour
         
     }
 
-    public void speedUpOn(){
-        
+    public void kinokoOn(){
+        StartCoroutine(UpSpeed());
+    }
+
+    IEnumerator UpSpeed(){
+        isSpeedUp = true;
+        WaitTime = 10f;
+        yield return new WaitForSeconds(WaitTime);
+        isSpeedUp = false;
     }
 }

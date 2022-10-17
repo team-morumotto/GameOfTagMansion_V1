@@ -19,7 +19,7 @@ public class Item01 : MonoBehaviour
     
     void OnCollisionEnter(Collision collision)
     {
-        stateM.GetComponent<StateManeger>().speedUpOn();
+        stateM.GetComponent<StateManeger>().kinokoOn();
         Destroy(gameObject);
     }
 }

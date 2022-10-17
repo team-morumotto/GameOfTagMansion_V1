@@ -10,13 +10,20 @@ public class CameraController : MonoBehaviour
     private bool DebugCameraflag = false; //デバッグ用カメラ
     private Vector3 initCameraposition;
     void Start () {
-        targetObj = GameObject.Find("Player");
+        /*var pc = GameObject.Find("PlayerController");
+        targetObj = pc.GetComponent<PlayerController>().Player;
         targetPos = targetObj.transform.position;
-        initCameraposition = transform.position;
+        initCameraposition = transform.position;*/
     }
  
     void Update() {
         if(DebugCameraflag == false){
+            if(targetObj == null){
+                var pc = GameObject.Find("PlayerController");
+                targetObj = pc.GetComponent<PlayerController>().Player;
+                targetPos = targetObj.transform.position;
+                initCameraposition = transform.position;
+            }
             // targetの移動量分、自分（カメラ）も移動する
             transform.position += targetObj.transform.position - targetPos;
             targetPos = targetObj.transform.position;
