@@ -15,16 +15,13 @@ public class SetName : MonoBehaviourPunCallbacks
     public static string NAME;
     public InputField SetNameIF;
     public GameObject Connect;
+    public static bool onEndEditFLG;
     void Start(){
         SetNamePanel.SetActive(true);
         SetNameIF.onEndEdit.AddListener(delegate {SetNameAfter(SetNameIF.text);});
     }
-    void Update(){
-        if(Input.GetKeyDown(KeyCode.F)){
-        SetNamePanel.SetActive(true);
-        }
-    }
     void SetNameAfter(string name){
+        onEndEditFLG = true;
         NAME = name;
         Connect.SetActive(true);
         SetNamePanel.SetActive(false);
