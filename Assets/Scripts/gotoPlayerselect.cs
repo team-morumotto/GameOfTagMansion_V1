@@ -5,20 +5,18 @@ using UnityEngine;
 public class gotoPlayerselect : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject playerselectpanel;
-    public GameObject titlemenupanel;
-    void Start()
-    {
-        playerselectpanel.SetActive(false);
+    public GameObject PlayerSelectPanel;
+    public GameObject TitleMenuPanel;
+    void Start() {
+        PlayerSelectPanel.SetActive(false);
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+
     }
     public void gotoplayerselect(){
-        playerselectpanel.SetActive(true);
-        titlemenupanel.SetActive(false);
+        PlayerSelectPanel.SetActive(true);
+        TitleMenuPanel.SetActive(false);
     }
 }
