@@ -200,7 +200,6 @@ namespace UnityChan
 			GUI.Label (new Rect (Screen.width - 245, 130, 250, 30), "Alt : LookAt Camera");
 		}
 
-
 		// キャラクターのコライダーサイズのリセット関数
 		void resetCollider ()
 		{

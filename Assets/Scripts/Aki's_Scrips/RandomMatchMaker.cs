@@ -77,7 +77,8 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
                 camera.LookAt = Oni.transform;//CinemachineFreeLookコンポーネント内のLookAtにOniオブジェクトのtransformを設定
                 break;
         }
-        i++;//ルームへの接続人数を加算
-        Debug.Log(i);
+        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers) {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
     }
 }

@@ -119,11 +119,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2604536999163310749, guid: f066a4a933634e74083836036d931413, type: 3}
       propertyPath: sceneViewId
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5327812780899216182, guid: f066a4a933634e74083836036d931413, type: 3}
       propertyPath: m_Name
-      value: "Oni-\u6C34\u93E1\u3053\u3088\u307F_Variant"
+      value: "Oni-\u6C34\u93E1\u3053\u3088\u307F_Variant Variant"
       objectReference: {fileID: 0}
     - target: {fileID: 7632841899097184915, guid: f066a4a933634e74083836036d931413, type: 3}
       propertyPath: m_AnchoredPosition.y

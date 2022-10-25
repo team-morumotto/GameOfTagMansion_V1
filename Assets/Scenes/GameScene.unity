@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04c478c50e552a143997898d9c59e83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OniObject: {fileID: 5560075046843841626, guid: a0b243ff10477c8429f5c9186f507c16, type: 3}
+  OniObject: {fileID: 5213985913615028122, guid: 608814a3c0117b146b27a12772eb4877, type: 3}
   PlayerObject: {fileID: 8074021596506436809, guid: ac0aa98bf183a134d87d1e83b43e1508, type: 3}
   SpawnPoint:
   - {fileID: 1887836738}
