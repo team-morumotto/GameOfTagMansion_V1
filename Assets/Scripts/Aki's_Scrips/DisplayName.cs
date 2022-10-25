@@ -32,7 +32,7 @@ public class DisplayName : MonoBehaviourPunCallbacks {
     }
 
     void Update() {
-        NickName.text = photonView.Owner.NickName;
-        GetComponent<RectTransform>().transform.LookAt(Camera.main.transform);
+        NickName.text = photonView.Owner.NickName;//PhotonNetwork.LocalPlayer.NickNameを自分のオブジェクトノコになっているtextMeshオブジェクトに入れる;
+        GetComponent<RectTransform>().transform.LookAt(Camera.main.transform);//誰から見ても常に自分の名前が正面に見えるようにする
     }
 }

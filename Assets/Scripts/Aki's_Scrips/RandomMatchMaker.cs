@@ -78,5 +78,6 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
                 break;
         }
         i++;//ルームへの接続人数を加算
+        Debug.Log(i);
     }
 }

@@ -77,7 +77,9 @@ namespace UnityChan
 		// 以下、メイン処理.リジッドボディと絡めるので、FixedUpdate内で処理を行う.
 		void FixedUpdate ()
 		{
-			if(photonView.IsMine){
+			if(!photonView.IsMine){
+				return;
+			}
 				PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
 				float h = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義
 				float v = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
@@ -184,7 +186,6 @@ namespace UnityChan
 					if (!anim.IsInTransition (0)) {
 						anim.SetBool ("Rest", false);
 					}
-				}
 			}
 		}
 

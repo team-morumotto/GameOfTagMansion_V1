@@ -5,16 +5,10 @@ using Photon.Pun;
 
 public class oni_sample : MonoBehaviourPunCallbacks
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    void FixedUpdate(){
+        if(photonView.IsMine){
+            PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
+        }
     }
     void OnCollisionEnter(Collision col){
         if(col.gameObject.GetComponent<PhotonView>() == false){

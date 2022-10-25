@@ -2722,7 +2722,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.5
   m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: -20.783443, y: 88.54053, z: -157.5709}
+  m_RotationOffset: {x: -20.783443, y: 88.54052, z: -157.5709}
   m_AffectRotationX: 0
   m_AffectRotationY: 1
   m_AffectRotationZ: 0
@@ -6021,7 +6021,7 @@ GameObject:
   - component: {fileID: 7451465140299152144}
   - component: {fileID: 6348446939011039398}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: NameCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
