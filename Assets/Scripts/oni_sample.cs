@@ -9,9 +9,11 @@ public class oni_sample : MonoBehaviourPunCallbacks
     public float speed = 5f;
     private float inputHorizontal;
     private float inputVertical;
+    private Animator anim;
 
     void Start(){
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
     }
 
     void Update(){
@@ -19,13 +21,21 @@ public class oni_sample : MonoBehaviourPunCallbacks
             return;
         }
             PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
-            inputHorizontal = Input.GetAxis ("Horizontal") * speed;				// 入力デバイスの水平軸をhで定義
-            inputVertical = Input.GetAxis ("Vertical") * speed;				// 入力デバイスの垂直軸をvで定義
+            inputHorizontal = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義
+            inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
             
             //rb.velocity = new Vector3(h, rb.velocity.y, v);
         
     }
     void FixedUpdate(){
+        if(!photonView.IsMine){
+            return;
+        }
+        if(inputHorizontal==0 && inputVertical==0){
+                anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
+            }else{
+                anim.SetFloat ("Speed", 1);//プレイヤーが移動しているときは走るアニメーションを再生する
+            }
         // カメラの方向から、X-Z平面の単位ベクトルを取得
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
     
