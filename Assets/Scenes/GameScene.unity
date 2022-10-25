@@ -3318,9 +3318,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2175455664085794724, guid: ac0aa98bf183a134d87d1e83b43e1508, type: 3}
-        m_TargetAssemblyTypeName: playersample, Assembly-CSharp
-        m_MethodName: DeadAfterGotoTitle
+      - m_Target: {fileID: 1436867538}
+        m_TargetAssemblyTypeName: GotoTitleScene, Assembly-CSharp
+        m_MethodName: GotoTitle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
