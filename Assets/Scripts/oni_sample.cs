@@ -8,7 +8,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private Rigidbody rb;
     public float speed = 5f;
     private float inputHorizontal;
-    float inputVertical;
+    private float inputVertical;
 
     void Start(){
         rb = GetComponent<Rigidbody>();
@@ -19,8 +19,8 @@ public class oni_sample : MonoBehaviourPunCallbacks
             return;
         }
             PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
-            var h = Input.GetAxis ("Horizontal") * speed;				// 入力デバイスの水平軸をhで定義
-            var v = Input.GetAxis ("Vertical") * speed;				// 入力デバイスの垂直軸をvで定義
+            inputHorizontal = Input.GetAxis ("Horizontal") * speed;				// 入力デバイスの水平軸をhで定義
+            inputVertical = Input.GetAxis ("Vertical") * speed;				// 入力デバイスの垂直軸をvで定義
             
             //rb.velocity = new Vector3(h, rb.velocity.y, v);
         
