@@ -25,10 +25,15 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public GameObject OniObject;//鬼オブジェクト
     public GameObject PlayerObject;//プレイヤーオブジェクト
     public GameObject[] SpawnPoint;//キャラクタースポーンポイント
+    
+    public GameObject[] Character = {null,null,null,null};//生成したキャラクターを格納する配列
     private int Number;//鬼側か逃げる側かを識別するナンバー
-    private int i;//ナンバー
-    public static bool GameStartFlg = false;//ゲーム開始フラグ
-
+    public static int i = -1;//ナンバー
+    public float currentTime;
+    public static bool GameStartFlg = false;
+    public static bool CharacterSpawnFlg =false;
+    public Text Text;
+    public GameObject MasterConfig;//マスターコンフィグオブジェクト
     void Update(){
         if(SetName.onEndEditFLG){//SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
             Connect();
@@ -36,7 +41,6 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     }
     void Connect()//Photonマスターサーバー接続
     {
-        GameStartFlg = false;
         Number = GotoGameScene.a;//GotoGameSceneから鬼か逃げる側かを識別するナンバーを受け取る
         PhotonNetwork.ConnectUsingSettings();//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
     }
@@ -61,7 +65,6 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()//ルームに参加
     {
-        
         GameObject mainCamera = GameObject.FindWithTag("MainCamera");//シーン上のメインカメラを取得
         GameObject CinemachineManager = GameObject.FindWithTag("MainCameraManager");//シーン上のメインカメラマネージャーを取得
         CinemachineManager.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;//メインカメラマネージャーのCinemachineFreeLookを有効にする
@@ -69,18 +72,18 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         CinemachineFreeLook camera = CinemachineManager.GetComponent<CinemachineFreeLook>();//CinemachineFreeLookコンポーネントを取得
         switch(Number){
             case 0:
-                GameObject Player = PhotonNetwork.Instantiate(PlayerObject.name,SpawnPoint[i].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
+                GameObject Player = PhotonNetwork.Instantiate(PlayerObject.name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
                 camera.Follow = Player.transform;//CinemachineFreeLookコンポーネント内のFollowにOniオブジェクトのtransformを設定
                 camera.LookAt = Player.transform;//CinemachineFreeLookコンポーネント内のLookAtにOniオブジェクトのtransformを設定
                 break;
             case 1:
-                GameObject Oni = PhotonNetwork.Instantiate(OniObject.name,SpawnPoint[i].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
+                GameObject Oni = PhotonNetwork.Instantiate(OniObject.name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
                 camera.Follow = Oni.transform;//CinemachineFreeLookコンポーネント内のFollowにOniオブジェクトのtransformを設定
                 camera.LookAt = Oni.transform;//CinemachineFreeLookコンポーネント内のLookAtにOniオブジェクトのtransformを設定
                 break;
         }
-        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers) {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2) {//ルームに入室している人数がルームの最大人数になったら
+            PhotonNetwork.CurrentRoom.IsOpen = false;//ルームを閉める
             GameStartFlg = true;
         }
     }
