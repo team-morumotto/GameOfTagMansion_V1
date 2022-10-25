@@ -17,9 +17,15 @@ public class MasterConfig : MonoBehaviourPunCallbacks
     void Update()
     {
         GameStart();
+        Debug.Log(currentTime);
+
+        if(RandomMatchMaker.GameStartFlg == true){
+            GameStart();
+        }
     }
 
     void GameStart(){
         currentTime = PhotonNetwork.ServerTimestamp;
+        
     }
 }

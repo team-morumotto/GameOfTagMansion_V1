@@ -27,6 +27,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public GameObject[] SpawnPoint;//キャラクタースポーンポイント
     private int Number;//鬼側か逃げる側かを識別するナンバー
     private int i;//ナンバー
+    public static bool GameStartFlg = false;//ゲーム開始フラグ
 
     void Update(){
         if(SetName.onEndEditFLG){//SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
@@ -35,6 +36,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     }
     void Connect()//Photonマスターサーバー接続
     {
+        GameStartFlg = false;
         Number = GotoGameScene.a;//GotoGameSceneから鬼か逃げる側かを識別するナンバーを受け取る
         PhotonNetwork.ConnectUsingSettings();//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
     }
@@ -79,6 +81,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         }
         if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers) {
             PhotonNetwork.CurrentRoom.IsOpen = false;
+            GameStartFlg = true;
         }
     }
 }
