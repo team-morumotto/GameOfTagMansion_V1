@@ -31,7 +31,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     private int Number;										//鬼側か逃げる側かを識別するナンバー
     public static int i = -1;								 //ナンバー
     public float currentTime;
-    public static bool GameStartFlg = false;
+    public static bool GameStartFlg = false;//ゲーム開始フラグ
     public static bool CharacterSpawnFlg =false;
     void Update() {
         //SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
@@ -42,7 +42,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
 	//Photonマスターサーバー接続
     void Connect() {
-        Number = GotoGameScene.a;				//GotoGameSceneから鬼か逃げる側かを識別するナンバーを受け取る
+        Number = GoToChooseChara.PlayMode;				//GotoGameSceneから鬼か逃げる側かを識別するナンバーを受け取る
         PhotonNetwork.ConnectUsingSettings();	//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
     }
 
@@ -72,12 +72,12 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         CinemachineFreeLook camera = CinemachineManager.GetComponent<CinemachineFreeLook>();//CinemachineFreeLookコンポーネントを取得
         switch(Number) {
             case 0:
-                GameObject Player = PhotonNetwork.Instantiate(PlayerObject.name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
+                GameObject Player = PhotonNetwork.Instantiate(PlayerObject[GoToChooseChara.Characters].name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
                 camera.Follow = Player.transform; //CinemachineFreeLookコンポーネント内のFollowにOniオブジェクトのtransformを設定
                 camera.LookAt = Player.transform; //CinemachineFreeLookコンポーネント内のLookAtにOniオブジェクトのtransformを設定
                 break;
             case 1:
-                GameObject Oni = PhotonNetwork.Instantiate(OniObject.name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
+                GameObject Oni = PhotonNetwork.Instantiate(OniObject[GoToChooseChara.Characters].name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
                 camera.Follow = Oni.transform; //CinemachineFreeLookコンポーネント内のFollowにOniオブジェクトのtransformを設定
                 camera.LookAt = Oni.transform; //CinemachineFreeLookコンポーネント内のLookAtにOniオブジェクトのtransformを設定
                 break;

@@ -11482,6 +11482,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animSpeed: 1.5
   initSpeed: 0.1
+  GoToTitlePanel: {fileID: 7567890863705818494, guid: be4554acd76858843b32aff331beb0bd, type: 3}
+  Canvas: {fileID: 0}
+  camera: {fileID: 0}
+  GoToTitleButton: {fileID: 5745344339930063920, guid: 9dd65a382845cbf4f82c661693ade87d, type: 3}
 --- !u!1 &5350224391776249408
 GameObject:
   m_ObjectHideFlags: 0

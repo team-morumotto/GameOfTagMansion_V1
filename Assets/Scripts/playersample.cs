@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Cinemachine;
+using UnityEngine.UI;
 
 public class playersample : MonoBehaviourPunCallbacks
 {
@@ -10,35 +12,30 @@ public class playersample : MonoBehaviourPunCallbacks
     public float animSpeed = 1.5f;
     private Rigidbody rb;
     private Animator anim;
-    private GameObject cameraObject;	// メインカメラへの参照
 
     float inputHorizontal;
     float inputVertical;
     [SerializeField] private float initSpeed = 0.1f;
     private float speed;
     private float moveSpeed = 5.0f;
-    private Vector3 rv; //入力値の格納用
-    private float v;
-    private float h;
-    static int idleState = Animator.StringToHash ("Base Layer.Idle");
-	static int locoState = Animator.StringToHash ("Base Layer.Locomotion");
-	static int jumpState = Animator.StringToHash ("Base Layer.Jump");
-	static int restState = Animator.StringToHash ("Base Layer.Rest");
 
     private GameObject MySpawnPoint;//キャラクターのステージスポーンポイント
+    public GameObject ResultPanel;//リザルトパネル
+    public GameObject GoToTitleButton;//タイトルに戻るボタン
+    public Canvas Canvas;
+
+    public CinemachineOrbitalTransposer camera;
     void Start () {
         anim = GetComponent<Animator> ();
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider> ();
+        camera = GameObject.FindWithTag("MainCameraManager").GetComponent<Cinemachine.CinemachineOrbitalTransposer>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
         speed = initSpeed;
     }
 
     void Update () {
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
-        if(RandomMatchMaker.CharacterSpawnFlg){
-            GameSpawn(); //プレイヤーが移動
-        }
     }
 
     void FixedUpdate(){
@@ -71,14 +68,14 @@ public class playersample : MonoBehaviourPunCallbacks
         }
     }
     public void OnCollisionEnter(Collision col){
+        if(!photonView.IsMine){
+            return;
+        }
         if(col.gameObject.GetComponent<oni_sample>() == true){
-            Debug.Log("nenenennenen");
-            PhotonNetwork.Disconnect();
+            ResultPanel.SetActive(true);
         }
     }
-
-    private void GameSpawn(){
-        transform.position = MySpawnPoint.transform.position; //スポーンポイントの位置に移動
-        transform.rotation = MySpawnPoint.transform.rotation; //スポーンポイントの向きに向く
+    public void DeadAfterGotoTitle(){
+        ResultPanel.SetActive(false);
     }
 }

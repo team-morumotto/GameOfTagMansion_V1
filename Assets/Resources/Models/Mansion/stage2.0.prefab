@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 299921076}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 807032656}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1172142071}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1511190863}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 2334307542426600435}
   - component: {fileID: 6825508381351714708}
   - component: {fileID: 8201222147871980062}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floor_1F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 2286904355838986009}
   - component: {fileID: 2680298526166509775}
   - component: {fileID: 1195736486123880150}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_WestCollision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 8437892558938696818}
   - component: {fileID: 2737512180526610707}
   - component: {fileID: 3662116492701840509}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Room_2F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -427,7 +427,7 @@ GameObject:
   - component: {fileID: 945303291361361882}
   - component: {fileID: 4575809320070621930}
   - component: {fileID: 3366734587677835830}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_WestFloor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -508,7 +508,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3494053959078439172}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 1f
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -542,7 +542,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4942842892064028956}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 3f
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -579,7 +579,7 @@ GameObject:
   - component: {fileID: 278410098619541967}
   - component: {fileID: 6452825701191454273}
   - component: {fileID: 4514614610291326119}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Room_3F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -676,7 +676,7 @@ GameObject:
   - component: {fileID: 6527906425782249880}
   - component: {fileID: 294377679048603019}
   - component: {fileID: 6580248605873487260}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_1F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -771,7 +771,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8642480185389777107}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -805,7 +805,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 606298973586965071}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_W
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +841,7 @@ GameObject:
   - component: {fileID: 5454038253998846405}
   - component: {fileID: 6863324390291530023}
   - component: {fileID: 1069685064243617213}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_EastFloor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -922,7 +922,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4180414205007422232}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 2f
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -959,7 +959,7 @@ GameObject:
   - component: {fileID: 7641981366423257978}
   - component: {fileID: 4710711066355425676}
   - component: {fileID: 4268291426354688067}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Room_1F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1057,7 +1057,7 @@ GameObject:
   - component: {fileID: 2105157802048376091}
   - component: {fileID: 1733219150989740674}
   - component: {fileID: 1750630299}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_3F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1168,7 +1168,7 @@ GameObject:
   - component: {fileID: 8588441255132062561}
   - component: {fileID: 1672276790262340321}
   - component: {fileID: 5717748565622351788}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floor_2F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1265,7 +1265,7 @@ GameObject:
   - component: {fileID: 8955611012923222824}
   - component: {fileID: 7245917463927871987}
   - component: {fileID: 5200949599148472188}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_EastWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1360,7 +1360,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7885046681910166447}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: stage2.0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1403,7 +1403,7 @@ GameObject:
   - component: {fileID: 6435645622532716914}
   - component: {fileID: 7820430235154528592}
   - component: {fileID: 1661065117462598630}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_WestWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1501,7 +1501,7 @@ GameObject:
   - component: {fileID: 1063126300195273907}
   - component: {fileID: 7216414892037595524}
   - component: {fileID: 1418604492986296859}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall_2F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1599,7 +1599,7 @@ GameObject:
   - component: {fileID: 8673054595427319142}
   - component: {fileID: 3607774402722316098}
   - component: {fileID: 5620202919549926161}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floor_3F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1696,7 +1696,7 @@ GameObject:
   - component: {fileID: 716562304685593395}
   - component: {fileID: 6491625618337720682}
   - component: {fileID: 7297625465636612162}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_EastCollision
   m_TagString: Untagged
   m_Icon: {fileID: 0}

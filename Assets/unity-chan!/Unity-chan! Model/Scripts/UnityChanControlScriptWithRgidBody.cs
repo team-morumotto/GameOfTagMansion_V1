@@ -209,13 +209,5 @@ namespace UnityChan
 			col.center = orgVectColCenter;
 			}
 		}
-
-		public void OnCollisionEnter(Collision col){
-			if(col.gameObject.GetComponent<oni_sample>() == true){
-				isDeadFlag = true;
-				Debug.Log("nenenennenen");
-				PhotonNetwork.Disconnect();
-			}
-		}
 	}
 }
