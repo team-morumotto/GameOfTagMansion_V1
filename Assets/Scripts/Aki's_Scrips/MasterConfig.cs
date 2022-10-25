@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 
 public class MasterConfig : MonoBehaviourPunCallbacks
 {
     public static GameObject SpawnPoint;
     public float currentTime;
+    public Text Text;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +28,6 @@ public class MasterConfig : MonoBehaviourPunCallbacks
 
     void GameStart(){
         currentTime = PhotonNetwork.ServerTimestamp;
-        
+        Text.text = currentTime.ToString();
     }
 }

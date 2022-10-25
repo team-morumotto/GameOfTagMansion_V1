@@ -43,11 +43,12 @@ public class playersample : MonoBehaviourPunCallbacks
         if(photonView.IsMine){
             string aho = PhotonNetwork.CurrentRoom.Name;
             string gomi = PhotonNetwork.LocalPlayer.UserId.ToString();
-
+            PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
+            
             if(inputHorizontal==0 && inputVertical==0){
-                anim.SetFloat ("Speed", 0);
+                anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
             }else{
-                anim.SetFloat ("Speed", 1);
+                anim.SetFloat ("Speed", 1);//プレイヤーが移動しているときは走るアニメーションを再生する
             }
                 
             anim.speed = animSpeed;
