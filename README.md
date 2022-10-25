@@ -34,3 +34,6 @@ https://zenn.dev/o8que/books/bdcb9af27bdd7d/viewer/c04ad5
 
 トマシープが学ぶ Unity/VR/AR が好きなミーハー人間のメモ - Photonのプレイヤー名
 https://bibinbaleo.hatenablog.com/entry/2019/09/06/131024
+
+ぺんごや - 【Unity】アスペクト比や解像度に合わせてUIの位置とサイズを固定する方法
+https://pengoya.net/unity/ui-fix/
