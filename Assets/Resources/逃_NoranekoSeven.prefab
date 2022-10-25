@@ -5672,8 +5672,8 @@ GameObject:
   - component: {fileID: 3949169845692160467}
   - component: {fileID: 2175455664085794724}
   m_Layer: 0
-  m_Name: NoranekoSeven_Variant
-  m_TagString: Untagged
+  m_Name: "\u9003_NoranekoSeven"
+  m_TagString: Nigeru
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

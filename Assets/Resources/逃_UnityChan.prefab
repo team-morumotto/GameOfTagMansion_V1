@@ -327,7 +327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2563240036826980850, guid: e335e27274b10cd4dad6cca08e74e54b, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2563240036833839208, guid: e335e27274b10cd4dad6cca08e74e54b, type: 3}
       propertyPath: m_RootOrder
@@ -375,7 +375,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2563240036834071624, guid: e335e27274b10cd4dad6cca08e74e54b, type: 3}
       propertyPath: m_Name
-      value: UCAkiTest
+      value: "\u9003_UnityChan"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2563240036834071624, guid: e335e27274b10cd4dad6cca08e74e54b, type: 3}
+      propertyPath: m_TagString
+      value: Nigeru
       objectReference: {fileID: 0}
     - target: {fileID: 2582236290410455927, guid: e335e27274b10cd4dad6cca08e74e54b, type: 3}
       propertyPath: sceneViewId
