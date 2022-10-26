@@ -24,13 +24,14 @@ public class playersample : MonoBehaviourPunCallbacks
     public GameObject GoToTitleButton;//タイトルに戻るボタン
     public Canvas Canvas;
 
-    public CinemachineOrbitalTransposer camera;
+    public CinemachineFreeLook camera;
     private GameObject Panels;
     void Start () {
         anim = GetComponent<Animator> ();
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider> ();
-        camera = GameObject.FindWithTag("MainCameraManager").GetComponent<Cinemachine.CinemachineOrbitalTransposer>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
+        GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
+        camera = CameraObj.GetComponent<Cinemachine.CinemachineFreeLook>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
         speed = initSpeed;
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
     }
@@ -42,6 +43,11 @@ public class playersample : MonoBehaviourPunCallbacks
 
     void FixedUpdate(){
         if(photonView.IsMine){
+            if(Input.GetMouseButton(0)){
+                camera.enabled =true;
+            }else{
+                camera.enabled =false;
+            }
             string aho = PhotonNetwork.CurrentRoom.Name;
             string gomi = PhotonNetwork.LocalPlayer.UserId.ToString();
             PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
