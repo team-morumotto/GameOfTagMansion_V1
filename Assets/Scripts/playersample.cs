@@ -76,9 +76,8 @@ public class playersample : MonoBehaviourPunCallbacks
         }
         if(col.gameObject.GetComponent<oni_sample>() == true){
             Panels.SetActive(true);
+            PhotonNetwork.Destroy(gameObject);
+            PhotonNetwork.Disconnect();
         }
-    }
-    public void DeadAfterGotoTitle(){
-        Panels.SetActive(true);
     }
 }

@@ -13,20 +13,20 @@ namespace MasterConfig{
         public float currentTime;
         public GameObject[] list = {null,null,null,null};
         public Text Text;
-        // Start is called before the first frame update
-        void ArraySet(){
-            PhotonNetwork.ConnectUsingSettings();//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
-            photonView.RPC(nameof(Baka),RpcTarget.All);
-        }
+        
         void Update(){
             if(RandomMatchMaker.GameStartFlg){
                 ArraySet();
                 RandomMatchMaker.GameStartFlg = false;
             }
         }
+        void ArraySet(){
+            PhotonNetwork.ConnectUsingSettings();//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
+            photonView.RPC(nameof(SetStageSpawn),RpcTarget.All);
+        }
 
         [PunRPC]
-        void Baka(){
+        void SetStageSpawn(){
             GameObject[] Character_Nige = GameObject.FindGameObjectsWithTag("Nigeru");//逃げる側のキャラクターを配列に格納
             GameObject[] Character_Oni = GameObject.FindGameObjectsWithTag("Oni");//鬼側のキャラクターを配列に格納
 
