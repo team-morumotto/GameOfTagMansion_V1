@@ -55,7 +55,7 @@ public class playersample : MonoBehaviourPunCallbacks
             if(inputHorizontal==0 && inputVertical==0){
                 anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
             }else{
-                anim.SetFloat ("Speed", 1);//プレイヤーが移動しているときは走るアニメーションを再生する
+                anim.SetFloat ("Speed", 0.8f);//プレイヤーが移動しているときは走るアニメーションを再生する
             }
 
             anim.speed = animSpeed;
