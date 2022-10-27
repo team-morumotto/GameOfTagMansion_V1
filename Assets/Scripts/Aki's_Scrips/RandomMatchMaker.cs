@@ -29,14 +29,19 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public GameObject MasterConfig;							//マスターコンフィグオブジェクト
     public Text Text;
     private int Number;										//鬼側か逃げる側かを識別するナンバー
+    public static int gomi=0;
     public static int i = -1;								 //ナンバー
     public float currentTime;
     public static bool GameStartFlg = false;//ゲーム開始フラグ
     public static bool CharacterSpawnFlg =false;
+    public static bool kasu = false;
     void Update() {
         //SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
         if(SetName.onEndEditFLG) {
             Connect();
+        }
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 4) {
+            photonView.RPC(nameof(sinekasu),RpcTarget.All);
         }
     }
 
@@ -60,16 +65,12 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message) {
         RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
         roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
-        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
-        hashtable.Add("Time",PhotonNetwork.ServerTimestamp);
 
-        roomOptions.CustomRoomProperties = hashtable;
         PhotonNetwork.CreateRoom(null, roomOptions);	//ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
 
 	//ルームに参加した時
     public override void OnJoinedRoom() {
-        Debug.Log(PhotonNetwork.CurrentRoom.CustomProperties["Time"]);
         GameObject mainCamera = GameObject.FindWithTag("MainCamera");						//シーン上のメインカメラを取得
         GameObject CinemachineManager = GameObject.FindWithTag("MainCameraManager");		//シーン上のメインカメラマネージャーを取得
         CinemachineManager.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;	//メインカメラマネージャーのCinemachineFreeLookを有効にする
@@ -88,9 +89,12 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
                 break;
         }
 		//ルームに入室している人数がルームの最大人数になったら
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 2) {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 4) {
             PhotonNetwork.CurrentRoom.IsOpen = false; //ルームを閉める
-            GameStartFlg = true;
         }
+    }
+    [PunRPC]
+    void sinekasu(){
+        GameStartFlg = true; //ゲーム開始フラグをtrueにする
     }
 }

@@ -1923,6 +1923,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  GameTime: 120000
+  SpawnPoint:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  list:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  PlayerPeople: 2
 --- !u!1 &3007320802440010521
 GameObject:
   m_ObjectHideFlags: 0

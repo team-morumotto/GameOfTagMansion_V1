@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using System;
 
 public class oni_sample : MonoBehaviourPunCallbacks
 {
@@ -14,18 +15,25 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private Text Text;
     private float time;
     public int GameTime=120000;//カウントダウンの時間
+    private int SpawnCnt = 0;
+    public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
+    public GameObject[] list = {null,null,null,null};
 
     //プレイヤーキル関連
     [SerializeField] private int PlayerPeople = 2; //プレイヤー人数なんで人数変わったら変えろ
     private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
     private GameObject Panels;
+    
     void Start(){
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();//編集:aki
-        time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
-        time += GameTime;//カウントダウンの時間を加算しておく
+        SpawnPoint[0] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint").gameObject;
+        SpawnPoint[1] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_01").gameObject;
+        SpawnPoint[2] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_02").gameObject;
+        SpawnPoint[3] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_03").gameObject;
+        
     }
 
     void Update(){
@@ -35,7 +43,10 @@ public class oni_sample : MonoBehaviourPunCallbacks
             PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
             inputHorizontal = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義
             inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
-            Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
+            if(photonView.Owner.ActorNumber == 4){
+                photonView.RPC(nameof(GOMI2),RpcTarget.All);
+            }
+            KASU();
             //rb.velocity = new Vector3(h, rb.velocity.y, v);
 
         //最大人数になったのでゲームがスタートしたと認識する
@@ -46,7 +57,6 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(playersetflag == true&&PhotonNetwork.PlayerList.Length == 1){
             kill_every_survivor();
         }
-        
     }
     void FixedUpdate(){
         if(!photonView.IsMine){
@@ -88,5 +98,42 @@ public class oni_sample : MonoBehaviourPunCallbacks
         //result_text.text = "Your Lose…";
         PhotonNetwork.Destroy(gameObject);
         PhotonNetwork.Disconnect();
-    }
+        }
+
+        void KASU(){
+            if(SpawnCnt!=0){
+                return;
+            }
+            if(!RandomMatchMaker.GameStartFlg){
+                return;
+            }
+            photonView.RPC(nameof(GOMI),RpcTarget.All);
+            SpawnCnt++;
+            var actor = photonView.Owner.ActorNumber;
+            switch(actor){
+                case 1:
+                transform.position = SpawnPoint[0].transform.position;
+                break;
+                case 2:
+                transform.position = SpawnPoint[1].transform.position;
+                break;
+                case 3:
+                transform.position = SpawnPoint[2].transform.position;
+                break;
+                case 4:
+                transform.position = SpawnPoint[3].transform.position;
+                time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
+                time += GameTime;//カウントダウンの時間を加算しておく
+                break;
+            }
+        }
+        [PunRPC]
+        void GOMI(){
+            RandomMatchMaker.GameStartFlg = true;
+        }
+        [PunRPC]
+        void GOMI2(){
+            Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
+        }
+
 }

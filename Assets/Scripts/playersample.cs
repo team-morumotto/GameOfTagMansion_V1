@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 using UnityEngine.UI;
+using System;
 
 public class playersample : MonoBehaviourPunCallbacks
 {
@@ -17,18 +18,24 @@ public class playersample : MonoBehaviourPunCallbacks
     float inputVertical;
     [SerializeField] private float initSpeed = 0.1f;
     private float speed;
-    private float moveSpeed = 5.0f;
+    private float moveSpeed = 4.0f;
 
     private GameObject MySpawnPoint;//キャラクターのステージスポーンポイント
     public GameObject ResultPanel;//リザルトパネル
     public GameObject GoToTitleButton;//タイトルに戻るボタン
+    public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
+    public GameObject[] list = {null,null,null,null};
+
     public Canvas Canvas;
     private GameObject Panels;
     private Text result_text; //リザルトテキスト
     public CinemachineFreeLook camera;
 
     int time;
+    int SpawnCnt = 0;
     public int GameTime=120000;//カウントダウンの時間
+    [SerializeField]
+    public static int SpawnFlg = 0;
 
     Text Text;
     void Start () {
@@ -41,6 +48,10 @@ public class playersample : MonoBehaviourPunCallbacks
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
+        SpawnPoint[0] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint").gameObject;
+        SpawnPoint[1] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_01").gameObject;
+        SpawnPoint[2] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_02").gameObject;
+        SpawnPoint[3] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_03").gameObject;
         time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
         time += GameTime;//カウントダウンの時間を加算しておく
     }
@@ -51,7 +62,10 @@ public class playersample : MonoBehaviourPunCallbacks
         }
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
-        Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
+        if(RandomMatchMaker.GameStartFlg){
+            Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
+        }
+        KASU();
     }
 
     void FixedUpdate(){
@@ -68,7 +82,7 @@ public class playersample : MonoBehaviourPunCallbacks
             if(inputHorizontal==0 && inputVertical==0){
                 anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
             }else{
-                anim.SetFloat ("Speed", 0.8f);//プレイヤーが移動しているときは走るアニメーションを再生する
+                anim.SetFloat ("Speed", 1f);//プレイヤーが移動しているときは走るアニメーションを再生する
             }
 
             anim.speed = animSpeed;
@@ -101,4 +115,33 @@ public class playersample : MonoBehaviourPunCallbacks
             PhotonNetwork.Disconnect();//自分をサーバーから切断
         }
     }
+        void KASU(){
+            if(SpawnCnt!=0){
+                return;
+            }
+            if(!RandomMatchMaker.GameStartFlg){
+                return;
+            }
+            photonView.RPC(nameof(GOMI),RpcTarget.All);
+            SpawnCnt++;
+            var actor = photonView.Owner.ActorNumber;
+            switch(actor){
+                case 1:
+                transform.position = SpawnPoint[0].transform.position;
+                break;
+                case 2:
+                transform.position = SpawnPoint[1].transform.position;
+                break;
+                case 3:
+                transform.position = SpawnPoint[2].transform.position;
+                break;
+                case 4:
+                transform.position = SpawnPoint[3].transform.position;
+                break;
+            }
+        }
+        [PunRPC]
+        void GOMI(){
+            RandomMatchMaker.GameStartFlg = true;
+        }
 }
