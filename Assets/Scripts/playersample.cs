@@ -24,7 +24,7 @@ public class playersample : MonoBehaviourPunCallbacks
     public GameObject GoToTitleButton;//タイトルに戻るボタン
     public Canvas Canvas;
     private GameObject Panels;
-
+    private Text result_text; //リザルトテキスト
     public CinemachineFreeLook camera;
     
 
@@ -38,6 +38,7 @@ public class playersample : MonoBehaviourPunCallbacks
         speed = initSpeed;
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
+        result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
     }
 
     void Update () {
@@ -84,8 +85,11 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
+        //捕まったとき
         if(col.gameObject.GetComponent<oni_sample>() == true){
             Panels.SetActive(true);
+            //textどうにかしたんで確認お願いします
+            result_text.text = "Your Lose…";
             PhotonNetwork.Destroy(gameObject);
             PhotonNetwork.Disconnect();
         }

@@ -18,6 +18,7 @@ namespace MasterConfig{
 
         //残り人数生やす用
         public Text peopletext;
+        private bool Maxpeople = false;
         
         void Update(){
             if(RandomMatchMaker.GameStartFlg){
@@ -56,7 +57,15 @@ namespace MasterConfig{
         }
         //残り人数の反映
         private void Numberofpeopleleft(){
-            peopletext.text = "残り人数:" + (PhotonNetwork.PlayerList.Length)+"人";
+            if(PhotonNetwork.PlayerList.Length == 2){
+                Maxpeople = true;
+            }
+            if(Maxpeople){
+                peopletext.text = "残り人数:" + (PhotonNetwork.PlayerList.Length - 1)+"人";
+            }
+            else{
+                peopletext.text = "残り人数:" + (PhotonNetwork.PlayerList.Length)+"人";
+            }
         }
     }
 }
