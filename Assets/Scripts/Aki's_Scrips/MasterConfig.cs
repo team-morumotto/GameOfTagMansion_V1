@@ -28,6 +28,7 @@ namespace MasterConfig{
             if(GameTimeStartFlg){
                 photonView.RPC(nameof(GameStart),RpcTarget.All);
             }
+            Numberofpeopleleft();
         }
         void ArraySet(){
             PhotonNetwork.ConnectUsingSettings();//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
