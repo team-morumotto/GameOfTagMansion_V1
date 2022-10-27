@@ -11,9 +11,14 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private float inputVertical;
     private Animator anim;
 
+    //プレイヤーキル関連
+    [SerializeField] private int PlayerPeople = 2; //プレイヤー人数なんで人数変わったら変えろ
+    private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
+    private GameObject Panels;
     void Start(){
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
     }
 
     void Update(){
@@ -25,6 +30,15 @@ public class oni_sample : MonoBehaviourPunCallbacks
             inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
             
             //rb.velocity = new Vector3(h, rb.velocity.y, v);
+
+        //最大人数になったのでゲームがスタートしたと認識する
+        if(PhotonNetwork.PlayerList.Length == PlayerPeople&&playersetflag == false){
+            playersetflag = true;
+        }
+        //自分以外たおしたら
+        if(playersetflag == true&&PhotonNetwork.PlayerList.Length == 1){
+            kill_every_survivor();
+        }
         
     }
     void FixedUpdate(){
@@ -61,4 +75,11 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private void RpcSendMessage(string message) {
         Debug.Log(message);
     }*/
+    private void kill_every_survivor(){
+        //勝ったからパネル出す(おおむね処理はプレイヤーからもってきました)
+        Panels.SetActive(true);
+        //result_text.text = "Your Lose…";
+        PhotonNetwork.Destroy(gameObject);
+        PhotonNetwork.Disconnect();
+    }
 }
