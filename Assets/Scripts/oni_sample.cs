@@ -108,6 +108,8 @@ public class oni_sample : MonoBehaviourPunCallbacks
                 return;
             }
             photonView.RPC(nameof(GOMI),RpcTarget.All);
+            time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
+            time += GameTime;//カウントダウンの時間を加算しておく
             SpawnCnt++;
             var actor = photonView.Owner.ActorNumber;
             switch(actor){
@@ -122,18 +124,17 @@ public class oni_sample : MonoBehaviourPunCallbacks
                 break;
                 case 4:
                 transform.position = SpawnPoint[3].transform.position;
-                time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
-                time += GameTime;//カウントダウンの時間を加算しておく
                 break;
             }
         }
+
         [PunRPC]
         void GOMI(){
             RandomMatchMaker.GameStartFlg = true;
         }
+
         [PunRPC]
         void GOMI2(){
             Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
         }
-
 }

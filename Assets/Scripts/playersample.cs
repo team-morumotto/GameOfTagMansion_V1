@@ -62,9 +62,9 @@ public class playersample : MonoBehaviourPunCallbacks
         }
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
-        if(RandomMatchMaker.GameStartFlg){
-            Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
-        }
+        if(photonView.Owner.ActorNumber == 4){
+                photonView.RPC(nameof(GOMI2),RpcTarget.All);
+            }
         KASU();
     }
 
@@ -123,6 +123,8 @@ public class playersample : MonoBehaviourPunCallbacks
                 return;
             }
             photonView.RPC(nameof(GOMI),RpcTarget.All);
+            time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
+            time += GameTime;//カウントダウンの時間を加算しておく
             SpawnCnt++;
             var actor = photonView.Owner.ActorNumber;
             switch(actor){
@@ -143,5 +145,10 @@ public class playersample : MonoBehaviourPunCallbacks
         [PunRPC]
         void GOMI(){
             RandomMatchMaker.GameStartFlg = true;
+        }
+
+        [PunRPC]
+        void GOMI2(){
+            Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
         }
 }
