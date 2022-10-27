@@ -48,6 +48,7 @@ MonoBehaviour:
   - GameStart
   - LeftMember
   - Time
+  - RoomTime
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

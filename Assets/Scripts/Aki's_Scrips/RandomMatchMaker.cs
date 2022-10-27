@@ -60,11 +60,16 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message) {
         RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
         roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
+        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+        hashtable.Add("Time",PhotonNetwork.ServerTimestamp);
+
+        roomOptions.CustomRoomProperties = hashtable;
         PhotonNetwork.CreateRoom(null, roomOptions);	//ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
 
 	//ルームに参加した時
     public override void OnJoinedRoom() {
+        Debug.Log(PhotonNetwork.CurrentRoom.CustomProperties["Time"]);
         GameObject mainCamera = GameObject.FindWithTag("MainCamera");						//シーン上のメインカメラを取得
         GameObject CinemachineManager = GameObject.FindWithTag("MainCameraManager");		//シーン上のメインカメラマネージャーを取得
         CinemachineManager.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;	//メインカメラマネージャーのCinemachineFreeLookを有効にする
@@ -72,7 +77,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         CinemachineFreeLook camera = CinemachineManager.GetComponent<CinemachineFreeLook>();//CinemachineFreeLookコンポーネントを取得
         switch(Number) {
             case 0:
-                GameObject Player = PhotonNetwork.Instantiate(PlayerObject[GoToChooseChara.Characters].name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
+                GameObject Player = PhotonNetwork.Instantiate(PlayerObject[GoToChooseChara.Characters].name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Playerオブジェクトを生成
                 camera.Follow = Player.transform; //CinemachineFreeLookコンポーネント内のFollowにOniオブジェクトのtransformを設定
                 camera.LookAt = Player.transform; //CinemachineFreeLookコンポーネント内のLookAtにOniオブジェクトのtransformを設定
                 break;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 
 public class oni_sample : MonoBehaviourPunCallbacks
@@ -10,6 +11,9 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private float inputHorizontal;
     private float inputVertical;
     private Animator anim;
+    private Text Text;
+    private float time;
+    public int GameTime=120000;//カウントダウンの時間
 
     //プレイヤーキル関連
     [SerializeField] private int PlayerPeople = 2; //プレイヤー人数なんで人数変わったら変えろ
@@ -19,6 +23,9 @@ public class oni_sample : MonoBehaviourPunCallbacks
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
+        Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();//編集:aki
+        time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
+        time += GameTime;//カウントダウンの時間を加算しておく
     }
 
     void Update(){
@@ -28,7 +35,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
             PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
             inputHorizontal = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義
             inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
-            
+            Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
             //rb.velocity = new Vector3(h, rb.velocity.y, v);
 
         //最大人数になったのでゲームがスタートしたと認識する

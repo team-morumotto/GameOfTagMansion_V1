@@ -21,10 +21,4 @@ public class MasterTimeConfig : MonoBehaviourPunCallbacks
             photonView.RPC(nameof(Time),RpcTarget.All);
         }
     }
-
-    [PunRPC]
-    void  Time(){
-        Debug.Log("Time");
-        Text.text = PhotonNetwork.ServerTimestamp.ToString();
-    }
 }

@@ -26,7 +26,9 @@ public class playersample : MonoBehaviourPunCallbacks
     private GameObject Panels;
     private Text result_text; //リザルトテキスト
     public CinemachineFreeLook camera;
-    
+
+    int time;
+    public int GameTime=120000;//カウントダウンの時間
 
     Text Text;
     void Start () {
@@ -39,22 +41,28 @@ public class playersample : MonoBehaviourPunCallbacks
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
+        time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
+        time += GameTime;//カウントダウンの時間を加算しておく
     }
 
     void Update () {
+        if(!photonView.IsMine){
+            return;
+        }
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
+        Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
     }
 
     void FixedUpdate(){
-        if(photonView.IsMine){
+        if(!photonView.IsMine){
+            return;
+        }
             if(Input.GetMouseButton(0)){
                 camera.enabled =true;
             }else{
                 camera.enabled =false;
             }
-            string aho = PhotonNetwork.CurrentRoom.Name;
-            string gomi = PhotonNetwork.LocalPlayer.UserId.ToString();
             PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
 
             if(inputHorizontal==0 && inputVertical==0){
@@ -78,7 +86,6 @@ public class playersample : MonoBehaviourPunCallbacks
             if (moveForward != Vector3.zero) {
                 transform.rotation = Quaternion.LookRotation(moveForward);
             }
-        }
     }
     public void OnCollisionEnter(Collision col){
 
@@ -86,12 +93,12 @@ public class playersample : MonoBehaviourPunCallbacks
             return;
         }
         //捕まったとき
-        if(col.gameObject.GetComponent<oni_sample>() == true){
-            Panels.SetActive(true);
+        if(col.gameObject.GetComponent<oni_sample>() == true){//あたったオブジェクトにOni_Sampleがついているかどうか
+            Panels.SetActive(true);//パネルを表示
             //textどうにかしたんで確認お願いします
             result_text.text = "Your Lose…";
-            PhotonNetwork.Destroy(gameObject);
-            PhotonNetwork.Disconnect();
+            PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
+            PhotonNetwork.Disconnect();//自分をサーバーから切断
         }
     }
 }
