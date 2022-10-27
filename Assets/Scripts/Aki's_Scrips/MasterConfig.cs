@@ -13,12 +13,16 @@ namespace MasterConfig{
         public float currentTime;
         public GameObject[] list = {null,null,null,null};
         public Text Text;
+
+        //残り人数生やす用
+        public Text peopletext;
         
         void Update(){
             if(RandomMatchMaker.GameStartFlg){
                 ArraySet();
                 RandomMatchMaker.GameStartFlg = false;
             }
+            Numberofpeopleleft();
         }
         void ArraySet(){
             PhotonNetwork.ConnectUsingSettings();//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
@@ -41,6 +45,10 @@ namespace MasterConfig{
         void GameStart(){
             currentTime = PhotonNetwork.ServerTimestamp;
             Text.text = currentTime.ToString();
+        }
+        //残り人数の反映
+        private void Numberofpeopleleft(){
+            peopletext.text = "残り人数:" + (PhotonNetwork.PlayerList.Length)+"人";
         }
     }
 }

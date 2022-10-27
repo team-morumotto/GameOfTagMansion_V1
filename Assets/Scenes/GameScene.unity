@@ -2665,6 +2665,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   Text: {fileID: 0}
+  peopletext: {fileID: 1370488913}
 --- !u!4 &1009811164
 Transform:
   m_ObjectHideFlags: 0
