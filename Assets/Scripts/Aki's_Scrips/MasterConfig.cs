@@ -12,7 +12,9 @@ namespace MasterConfig{
         public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
         public float currentTime;
         public GameObject[] list = {null,null,null,null};
+        public GameObject MasterObject;
         public Text Text;
+        public static bool GameTimeStartFlg = false;
 
         //残り人数生やす用
         public Text peopletext;
@@ -21,8 +23,11 @@ namespace MasterConfig{
             if(RandomMatchMaker.GameStartFlg){
                 ArraySet();
                 RandomMatchMaker.GameStartFlg = false;
+                GameTimeStartFlg =true;
             }
-            Numberofpeopleleft();
+            if(GameTimeStartFlg){
+                photonView.RPC(nameof(GameStart),RpcTarget.All);
+            }
         }
         void ArraySet(){
             PhotonNetwork.ConnectUsingSettings();//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
@@ -38,13 +43,15 @@ namespace MasterConfig{
             Array.Copy(Character_Oni,0,list,Character_Nige.Length,Character_Oni.Length);//逃げる側のキャラクターを配列に格納
             for (int i = 0; i < 2; i++)
             {
-                Debug.Log(i);
                 list[i].transform.position = SpawnPoint[i].transform.position;//キャラクターのスポーンポイントを設定
             }
+
+            Instantiate(MasterObject, new Vector3(0,0,0), Quaternion.identity);//時間を司るオブジェクトを生成
         }
+
+        [PunRPC]
         void GameStart(){
-            currentTime = PhotonNetwork.ServerTimestamp;
-            Text.text = currentTime.ToString();
+            GameTimeStartFlg =true;
         }
         //残り人数の反映
         private void Numberofpeopleleft(){

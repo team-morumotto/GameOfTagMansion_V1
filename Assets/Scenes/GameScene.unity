@@ -2664,6 +2664,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  MasterObject: {fileID: 7529326770037151620, guid: 567ebb64cf37dd741ad8d7fd62c23e77, type: 3}
   Text: {fileID: 0}
   peopletext: {fileID: 1370488913}
 --- !u!4 &1009811164

@@ -23,9 +23,12 @@ public class playersample : MonoBehaviourPunCallbacks
     public GameObject ResultPanel;//リザルトパネル
     public GameObject GoToTitleButton;//タイトルに戻るボタン
     public Canvas Canvas;
+    private GameObject Panels;
 
     public CinemachineFreeLook camera;
-    private GameObject Panels;
+    
+
+    Text Text;
     void Start () {
         anim = GetComponent<Animator> ();
         rb = GetComponent<Rigidbody>();
@@ -34,6 +37,7 @@ public class playersample : MonoBehaviourPunCallbacks
         camera = CameraObj.GetComponent<Cinemachine.CinemachineFreeLook>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
         speed = initSpeed;
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
+        Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
     }
 
     void Update () {
