@@ -64,7 +64,7 @@ public class playersample : MonoBehaviourPunCallbacks
         inputVertical = Input.GetAxisRaw("Vertical");
         if(photonView.Owner.ActorNumber == 4){
                 photonView.RPC(nameof(GOMI2),RpcTarget.All);
-            }
+        }
         KASU();
     }
 
@@ -150,5 +150,11 @@ public class playersample : MonoBehaviourPunCallbacks
         [PunRPC]
         void GOMI2(){
             Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
+            if(time-PhotonNetwork.ServerTimestamp<=0){//時間切れ
+                Panels.SetActive(true);//パネルを表示
+                result_text.text = "Your Win!";
+                PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
+                PhotonNetwork.Disconnect();//自分をサーバーから切断
+            }
         }
 }

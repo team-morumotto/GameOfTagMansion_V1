@@ -35,6 +35,9 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public static bool GameStartFlg = false;//ゲーム開始フラグ
     public static bool CharacterSpawnFlg =false;
     public static bool kasu = false;
+
+    public static int unnko;
+    public GameObject Oni_Button;
     void Update() {
         //SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
         if(SetName.onEndEditFLG) {

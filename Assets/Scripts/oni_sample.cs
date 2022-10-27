@@ -23,17 +23,18 @@ public class oni_sample : MonoBehaviourPunCallbacks
     [SerializeField] private int PlayerPeople = 2; //プレイヤー人数なんで人数変わったら変えろ
     private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
     private GameObject Panels;
+    Text result_text; //リザルトテキスト
     
     void Start(){
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
+        result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();//編集:aki
         SpawnPoint[0] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint").gameObject;
         SpawnPoint[1] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_01").gameObject;
         SpawnPoint[2] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_02").gameObject;
         SpawnPoint[3] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_03").gameObject;
-        
     }
 
     void Update(){
@@ -136,5 +137,11 @@ public class oni_sample : MonoBehaviourPunCallbacks
         [PunRPC]
         void GOMI2(){
             Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
+            if(time-PhotonNetwork.ServerTimestamp<=0){
+                Panels.SetActive(true);//パネルを表示
+                result_text.text = "Your Lose...";
+                PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
+                PhotonNetwork.Disconnect();//自分をサーバーから切断
+            }
         }
 }
