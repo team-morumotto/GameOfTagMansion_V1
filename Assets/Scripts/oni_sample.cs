@@ -26,7 +26,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     public float animSpeed = 1.5f;
     public int GameTime=120000;//カウントダウンの時間
     int CNT=0;
-    float Timen=10f;
+    float Timen=60f;
 
     void Start(){
         rb = GetComponent<Rigidbody>();
@@ -43,29 +43,59 @@ public class oni_sample : MonoBehaviourPunCallbacks
     }
 
     void Update(){
-            if(!photonView.IsMine){
-                return;
-            }
-            KASU();
-            if(RandomMatchMaker.GameStartFlg){
-                Timen -= Time.deltaTime;
-                Text.text= Timen.ToString();
-                if(Timen <= 0){
-                    Timen = 0;
-                    Panels.SetActive(true);
-                    result_text.text = "You Lose...";
-                    PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
-                    PhotonNetwork.Disconnect();//自分をサーバーから切断
-                }
-                if(Timen>=0 && PhotonNetwork.PlayerList.Length == 1){
-                    Timen = 0;
-                    Panels.SetActive(true);
-                    result_text.text = "You Winner!!";
-                    PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
-                    PhotonNetwork.LeaveRoom();//自分をサーバーから切断
-                }
-            }
+        if(!photonView.IsMine){
+            return;
+        }
+        //ゲーム中かどうか
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
+        Character_Spawn();
+        Timen -= Time.deltaTime;
+        Text.text= Mathf.Floor(Timen).ToString();          //stringにキャストしtextに代入
+        if(Timen <= 0){
+            result_text.text = "You Lose...";
+            Oni_Game_End();
+        }
+        if(Timen>=0 && PhotonNetwork.PlayerList.Length == 1){
+            result_text.text = "You Win!!";
+            Oni_Game_End();
+        }
     }
+    void Character_Spawn(){
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
+        photonView.RPC(nameof(Game_Now_Update),RpcTarget.All);
+        if(CNT!=0){
+            return;
+        }
+        CNT++;//以下の関数内の処理を一回だけ行うための処理
+
+        var actor = photonView.Owner.ActorNumber;//ルームに入ってきたプレイヤーの入室順番号を入手
+        switch(actor){//各プレイヤーの入室順番号によってスポーンポイントを変更
+            case 1:
+            transform.position = SpawnPoint[0].transform.position;
+            break;
+            case 2:
+            transform.position = SpawnPoint[1].transform.position;
+            break;
+            case 3:
+            transform.position = SpawnPoint[2].transform.position;
+            break;
+            case 4:
+            transform.position = SpawnPoint[3].transform.position;
+            break;
+        }
+    }
+    void Oni_Game_End(){
+        Timen = 0;
+        Text.text =0.ToString();
+        Panels.SetActive(true);
+        PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
+        Invoke("Out_After_Delay", 3.0f);  //3秒後にOut_After_Delay関数を呼び出す
+    }
+
     void FixedUpdate(){
         if(!photonView.IsMine){
             return;
@@ -93,36 +123,19 @@ public class oni_sample : MonoBehaviourPunCallbacks
             transform.rotation = Quaternion.LookRotation(moveForward);
         }
     }
+    void Out_After_Delay(){
+        //エディタの場合
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+        //ビルドの場合
+        #else
+            Application.Quit();//ゲームプレイ終了
+        //なんかあったとき
+        #endif
+    }
 
-        void KASU(){
-            if(!RandomMatchMaker.GameStartFlg){
-                return;
-            }
-            photonView.RPC(nameof(GOMI),RpcTarget.All);
-            if(CNT!=0){
-                return;
-            }
-            CNT++;
-
-            var actor = photonView.Owner.ActorNumber;
-            switch(actor){
-                case 1:
-                transform.position = SpawnPoint[0].transform.position;
-                break;
-                case 2:
-                transform.position = SpawnPoint[1].transform.position;
-                break;
-                case 3:
-                transform.position = SpawnPoint[2].transform.position;
-                break;
-                case 4:
-                transform.position = SpawnPoint[3].transform.position;
-                break;
-            }
-        }
-
-        [PunRPC]
-        void GOMI(){
-            RandomMatchMaker.GameStartFlg = true;
-        }
+    [PunRPC]
+    void Game_Now_Update(){
+        RandomMatchMaker.GameStartFlg = true;
+    }
 }

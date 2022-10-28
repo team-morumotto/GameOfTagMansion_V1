@@ -8,41 +8,29 @@ using System;
 
 public class playersample : MonoBehaviourPunCallbacks
 {
-
-    [SerializeField] public static int SpawnFlg = 0;
-    private GameObject MySpawnPoint;//キャラクターのステージスポーンポイント
     private CapsuleCollider col;
     private Rigidbody rb;
     private Animator anim;
     private AnimatorStateInfo currentBaseState;
     private Text result_text; //リザルトテキスト
-    public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
-    public GameObject ResultPanel;//リザルトパネル
-    public GameObject GoToTitleButton;//タイトルに戻るボタン
     private GameObject Panels;
-    public Canvas Canvas;
+    public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
     public CinemachineFreeLook camera;
     public float animSpeed = 1.5f;
 
     float inputHorizontal;
     float inputVertical;
     private float moveSpeed = 5.0f;
-
-    int time;
-    int SpawnCnt = 0;
-    public float GameTime=120000;//カウントダウンの時間
-
 	int CNT=0;
-
-	float Timen=10f;
+	float Timen=60f;
 
     Text Text;
     void Start () {
-                anim = GetComponent<Animator> ();
+        anim = GetComponent<Animator> ();
         rb = GetComponent<Rigidbody>();
-        col = GetComponent<CapsuleCollider> ();
         GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
         camera = CameraObj.GetComponent<Cinemachine.CinemachineFreeLook>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
+        col = GetComponent<CapsuleCollider> ();
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
@@ -56,32 +44,64 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
-		KASU();
-		if(RandomMatchMaker.GameStartFlg){
-			Timen -= Time.deltaTime;
-			Text.text= Timen.ToString();
-			if(Timen <= 0){
-				Timen = 0;
-				Panels.SetActive(true);//パネルを表示
-				result_text.text = "You Win!";
-				PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
-				PhotonNetwork.Disconnect();//自分をサーバーから切断
-			}
-		}
+		Character_Spawn();
+        Player_Win();//プレイヤーが勝つための関数
+    }
+    
+    void Character_Spawn(){
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
+        photonView.RPC(nameof(Game_Now_Update),RpcTarget.All);
+        if(CNT!=0){
+            return;
+        }
+        CNT++;//以下の関数内の処理を一回だけ行うための処理
 
+        var actor = photonView.Owner.ActorNumber;//ルームに入ってきたプレイヤーの入室順番号を入手
+        switch(actor){//各プレイヤーの入室順番号によってスポーンポイントを変更
+            case 1:
+            transform.position = SpawnPoint[0].transform.position;
+            break;
+            case 2:
+            transform.position = SpawnPoint[1].transform.position;
+            break;
+            case 3:
+            transform.position = SpawnPoint[2].transform.position;
+            break;
+            case 4:
+            transform.position = SpawnPoint[3].transform.position;
+            break;
+        }
+    }
+
+    void Player_Win(){
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
+        Timen -= Time.deltaTime;              //残り時間のカウントダウン
+        Text.text= Mathf.Floor(Timen).ToString();          //stringにキャストしtextに代入
+        if(Timen <= 0){                       //残り時間0秒を下回ると
+            Timen = 0;                        //Timenに0を代入
+            Text.text =0.ToString();          //残り時間を0に上書きし表示
+            Panels.SetActive(true);           //パネルを表示
+            result_text.text = "You Win!";
+            PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
+            Invoke("Out_After_Delay", 3.0f);  //3秒後にOut_After_Delay関数を呼び出す
+        }
     }
 
     void FixedUpdate(){
-      if(!photonView.IsMine){
+        if(!photonView.IsMine){
             return;
         }
             PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
-			inputHorizontal = Input.GetAxisRaw("Horizontal");
-        	inputVertical = Input.GetAxisRaw("Vertical");
+			inputHorizontal = Input.GetAxisRaw("Horizontal");    //横方向の値を入力
+        	inputVertical = Input.GetAxisRaw("Vertical");        //縦方向の値を入力
             if(inputHorizontal==0 && inputVertical==0){
-                anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
+                anim.SetFloat ("Speed", 0);                      //プレイヤーが移動してないときは走るアニメーションを止める
             }else{
-                anim.SetFloat ("Speed", 1f);//プレイヤーが移動しているときは走るアニメーションを再生する
+                anim.SetFloat ("Speed", 1f);                     //プレイヤーが移動しているときは走るアニメーションを再生する
             }
 
             anim.speed = animSpeed;
@@ -101,47 +121,36 @@ public class playersample : MonoBehaviourPunCallbacks
             }
     }
     public void OnCollisionEnter(Collision col){
-
         if(!photonView.IsMine){
             return;
         }
+        Player_Lose(col);//触れた対象のコライダー情報を引数に渡す
+    }
+
+    void Player_Lose(Collision col) {
         //捕まったとき
-        if(col.gameObject.GetComponent<oni_sample>() == true){//あたったオブジェクトにOni_Sampleがついているかどうか
-            Panels.SetActive(true);//パネルを表示
+        if(col.gameObject.GetComponent<oni_sample>() == true){  //あたったオブジェクトにOni_Sampleがついているかどうか
+            Text.text =0.ToString();
+            Panels.SetActive(true);                             //パネルを表示
             result_text.text = "Your Lose…";
-            PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
-            PhotonNetwork.Disconnect();//自分をサーバーから切断
+            PhotonNetwork.Destroy(gameObject);                  //自分を全体から破棄
+            Invoke("Out_After_Delay", 3.0f);                    //3秒後にOut_After_Delay関数を呼び出す
         }
     }
-        void KASU(){
-            if(!RandomMatchMaker.GameStartFlg){
-                return;
-            }
-            photonView.RPC(nameof(GOMI),RpcTarget.All);
-			if(CNT!=0){
-                return;
-            }
-			CNT++;
 
-            var actor = photonView.Owner.ActorNumber;
-            switch(actor){
-                case 1:
-                transform.position = SpawnPoint[0].transform.position;
-                break;
-                case 2:
-                transform.position = SpawnPoint[1].transform.position;
-                break;
-                case 3:
-                transform.position = SpawnPoint[2].transform.position;
-                break;
-                case 4:
-                transform.position = SpawnPoint[3].transform.position;
-                break;
-            }
-        }
+    void OutAfterDelay(){
+        //エディタの場合
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+        //ビルドの場合
+        #else
+            Application.Quit();//ゲームプレイ終了
+        //なんかあったとき
+        #endif
+    }
 
-        [PunRPC]
-        void GOMI(){
-            RandomMatchMaker.GameStartFlg = true;
-        }
+    [PunRPC]
+    void Game_Now_Update(){
+        RandomMatchMaker.GameStartFlg = true;
+    }
 }

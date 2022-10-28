@@ -44,6 +44,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
             Connect();
         }
         if (PhotonNetwork.CurrentRoom.PlayerCount == 4) {
+            Debug.Log("Connect");
             photonView.RPC(nameof(sinekasu),RpcTarget.All);
         }
     }
