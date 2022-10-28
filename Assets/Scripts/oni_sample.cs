@@ -3,36 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Cinemachine;
 using System;
 
 public class oni_sample : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private int PlayerPeople = 4; //プレイヤー人数なんで人数変わったら変えろ
     private Rigidbody rb;
-    public float speed = 5f;
+    private Animator anim;
     private AnimatorStateInfo currentBaseState;
-    public float animSpeed = 1.5f;
+    private Text Text;
+    Text result_text; //リザルトテキスト
+    public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
+    private GameObject Panels;
+    public CinemachineFreeLook camera;
     private float inputHorizontal;
     private float inputVertical;
-    private Animator anim;
-    private Text Text;
     private float time;
-    public int GameTime=128000;//カウントダウンの時間
     private int SpawnCnt = 0;
-    public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
-    public GameObject[] list = {null,null,null,null};
-
-    //プレイヤーキル関連
-    [SerializeField] private int PlayerPeople = 4; //プレイヤー人数なんで人数変わったら変えろ
     private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
-    private GameObject Panels;
-    Text result_text; //リザルトテキスト
-    
+    public float speed = 5f;
+    public float animSpeed = 1.5f;
+    public int GameTime=120000;//カウントダウンの時間
+    int CNT=0;
+    float Timen=10f;
+
     void Start(){
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
+        camera = CameraObj.GetComponent<Cinemachine.CinemachineFreeLook>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
+        Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
-        Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();//編集:aki
         SpawnPoint[0] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint").gameObject;
         SpawnPoint[1] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_01").gameObject;
         SpawnPoint[2] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_02").gameObject;
@@ -40,31 +43,36 @@ public class oni_sample : MonoBehaviourPunCallbacks
     }
 
     void Update(){
-        if(!photonView.IsMine){
-            return;
-        }
-            inputHorizontal = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義
-            inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
-            if(RandomMatchMaker.GameStartFlg){
-                photonView.RPC(nameof(GOMI2),RpcTarget.All);
+            if(!photonView.IsMine){
+                return;
             }
             KASU();
-            //rb.velocity = new Vector3(h, rb.velocity.y, v);
-
-        //最大人数になったのでゲームがスタートしたと認識する
-        if(PhotonNetwork.PlayerList.Length == PlayerPeople&&playersetflag == false){
-            playersetflag = true;
-        }
-        //自分以外たおしたら
-        if(playersetflag == true&&PhotonNetwork.PlayerList.Length == 1){
-            kill_every_survivor();
-        }
+            if(RandomMatchMaker.GameStartFlg){
+                Timen -= Time.deltaTime;
+                Text.text= Timen.ToString();
+                if(Timen <= 0){
+                    Timen = 0;
+                    Panels.SetActive(true);
+                    result_text.text = "You Lose...";
+                    PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
+                    PhotonNetwork.Disconnect();//自分をサーバーから切断
+                }
+                if(Timen>=0 && PhotonNetwork.PlayerList.Length == 1){
+                    Timen = 0;
+                    Panels.SetActive(true);
+                    result_text.text = "You Winner!!";
+                    PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
+                    PhotonNetwork.LeaveRoom();//自分をサーバーから切断
+                }
+            }
     }
     void FixedUpdate(){
         if(!photonView.IsMine){
             return;
         }
         PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
+        inputHorizontal = Input.GetAxis ("Horizontal");			// 入力デバイスの水平軸をhで定義
+        inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
         if(inputHorizontal==0 && inputVertical==0){
                 anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
             }else{
@@ -85,37 +93,17 @@ public class oni_sample : MonoBehaviourPunCallbacks
             transform.rotation = Quaternion.LookRotation(moveForward);
         }
     }
-    void OnCollisionEnter(Collision col){
-        if(col.gameObject.GetComponent<PhotonView>() == false){
-            return;
-        }
-        //photonView.RPC(nameof(RpcSendMessage), RpcTarget.All, p);
-    }
-
-    /*[PunRPC]
-    private void RpcSendMessage(string message) {
-        Debug.Log(message);
-    }*/
-    private void kill_every_survivor(){
-        //勝ったからパネル出す(おおむね処理はプレイヤーからもってきました)
-        Panels.SetActive(true);
-        //result_text.text = "Your Lose…";
-        PhotonNetwork.Destroy(gameObject);
-        PhotonNetwork.Disconnect();
-        }
 
         void KASU(){
-            if(SpawnCnt!=0){
-                return;
-            }
             if(!RandomMatchMaker.GameStartFlg){
                 return;
             }
             photonView.RPC(nameof(GOMI),RpcTarget.All);
-            time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
-            time += GameTime;//カウントダウンの時間を加算しておく
-            
-            SpawnCnt++;
+            if(CNT!=0){
+                return;
+            }
+            CNT++;
+
             var actor = photonView.Owner.ActorNumber;
             switch(actor){
                 case 1:
@@ -136,17 +124,5 @@ public class oni_sample : MonoBehaviourPunCallbacks
         [PunRPC]
         void GOMI(){
             RandomMatchMaker.GameStartFlg = true;
-        }
-
-        [PunRPC]
-        void GOMI2(){
-            var te = ((time-PhotonNetwork.ServerTimestamp)/1000);
-            Text.text = te.ToString();
-            if(time-PhotonNetwork.ServerTimestamp<=0){
-                Panels.SetActive(true);//パネルを表示
-                result_text.text = "Your Lose...";
-                PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
-                PhotonNetwork.Disconnect();//自分をサーバーから切断
-            }
         }
 }

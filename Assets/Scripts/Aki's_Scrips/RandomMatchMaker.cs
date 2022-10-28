@@ -69,7 +69,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
         roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
 
-        PhotonNetwork.CreateRoom(null, roomOptions);	//ルームを作成(ルームの名前を指定しない場合はnullを指定)
+        PhotonNetwork.CreateRoom("bakakasu", roomOptions);	//ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
 
 	//ルームに参加した時

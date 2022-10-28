@@ -1922,19 +1922,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47fe364845598b14d8dca857c420037f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  GameTime: 120000
+  PlayerPeople: 2
   SpawnPoint:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  list:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  PlayerPeople: 2
+  camera: {fileID: 0}
+  speed: 5
+  animSpeed: 1.5
+  GameTime: 120000
 --- !u!1 &3007320802440010521
 GameObject:
   m_ObjectHideFlags: 0

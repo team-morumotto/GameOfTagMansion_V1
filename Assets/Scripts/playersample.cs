@@ -8,43 +8,41 @@ using System;
 
 public class playersample : MonoBehaviourPunCallbacks
 {
+
+    [SerializeField] public static int SpawnFlg = 0;
+    private GameObject MySpawnPoint;//キャラクターのステージスポーンポイント
     private CapsuleCollider col;
-    private AnimatorStateInfo currentBaseState;
-    public float animSpeed = 1.5f;
     private Rigidbody rb;
     private Animator anim;
+    private AnimatorStateInfo currentBaseState;
+    private Text result_text; //リザルトテキスト
+    public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
+    public GameObject ResultPanel;//リザルトパネル
+    public GameObject GoToTitleButton;//タイトルに戻るボタン
+    private GameObject Panels;
+    public Canvas Canvas;
+    public CinemachineFreeLook camera;
+    public float animSpeed = 1.5f;
 
     float inputHorizontal;
     float inputVertical;
-    [SerializeField] private float initSpeed = 0.1f;
-    private float speed;
     private float moveSpeed = 5.0f;
-
-    private GameObject MySpawnPoint;//キャラクターのステージスポーンポイント
-    public GameObject ResultPanel;//リザルトパネル
-    public GameObject GoToTitleButton;//タイトルに戻るボタン
-    public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
-    public GameObject[] list = {null,null,null,null};
-
-    public Canvas Canvas;
-    private GameObject Panels;
-    private Text result_text; //リザルトテキスト
-    public CinemachineFreeLook camera;
 
     int time;
     int SpawnCnt = 0;
-    public int GameTime=120000;//カウントダウンの時間
-    [SerializeField]
-    public static int SpawnFlg = 0;
+    public float GameTime=120000;//カウントダウンの時間
+
+	int CNT=0;
+
+	float Timen=10f;
 
     Text Text;
     void Start () {
-        anim = GetComponent<Animator> ();
+                anim = GetComponent<Animator> ();
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider> ();
         GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
         camera = CameraObj.GetComponent<Cinemachine.CinemachineFreeLook>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
-        speed = initSpeed;
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
@@ -52,37 +50,43 @@ public class playersample : MonoBehaviourPunCallbacks
         SpawnPoint[1] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_01").gameObject;
         SpawnPoint[2] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_02").gameObject;
         SpawnPoint[3] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_03").gameObject;
-        time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
-        time += GameTime;//カウントダウンの時間を加算しておく
     }
 
     void Update () {
         if(!photonView.IsMine){
             return;
         }
-        inputHorizontal = Input.GetAxisRaw("Horizontal");
-        inputVertical = Input.GetAxisRaw("Vertical");
-            if(RandomMatchMaker.GameStartFlg){
-                photonView.RPC(nameof(GOMI2),RpcTarget.All);
-            }
-        KASU();
+		KASU();
+		if(RandomMatchMaker.GameStartFlg){
+			Timen -= Time.deltaTime;
+			Text.text= Timen.ToString();
+			if(Timen <= 0){
+				Timen = 0;
+				Panels.SetActive(true);//パネルを表示
+				result_text.text = "You Win!";
+				PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
+				PhotonNetwork.Disconnect();//自分をサーバーから切断
+			}
+		}
+
     }
 
     void FixedUpdate(){
-        if(!photonView.IsMine){
+      if(!photonView.IsMine){
             return;
         }
             PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
-
+			inputHorizontal = Input.GetAxisRaw("Horizontal");
+        	inputVertical = Input.GetAxisRaw("Vertical");
             if(inputHorizontal==0 && inputVertical==0){
                 anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
             }else{
                 anim.SetFloat ("Speed", 1f);//プレイヤーが移動しているときは走るアニメーションを再生する
             }
 
-            anim.speed = animSpeed;										// Animatorのモーション再生速度に animSpeedを設定する
-            currentBaseState = anim.GetCurrentAnimatorStateInfo (0);	// 参照用のステート変数にBase Layer (0)の現在のステートを設定する 現在のベースレイヤーの情報を取得
-
+            anim.speed = animSpeed;
+            currentBaseState = anim.GetCurrentAnimatorStateInfo (0);
+			Debug.Log("Fixed");
             // カメラの方向から、X-Z平面の単位ベクトルを取得
             Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
@@ -104,23 +108,21 @@ public class playersample : MonoBehaviourPunCallbacks
         //捕まったとき
         if(col.gameObject.GetComponent<oni_sample>() == true){//あたったオブジェクトにOni_Sampleがついているかどうか
             Panels.SetActive(true);//パネルを表示
-            //textどうにかしたんで確認お願いします
             result_text.text = "Your Lose…";
             PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
             PhotonNetwork.Disconnect();//自分をサーバーから切断
         }
     }
         void KASU(){
-            if(SpawnCnt!=0){
-                return;
-            }
             if(!RandomMatchMaker.GameStartFlg){
                 return;
             }
             photonView.RPC(nameof(GOMI),RpcTarget.All);
-            time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
-            time += GameTime;//カウントダウンの時間を加算しておく
-            SpawnCnt++;
+			if(CNT!=0){
+                return;
+            }
+			CNT++;
+
             var actor = photonView.Owner.ActorNumber;
             switch(actor){
                 case 1:
@@ -137,20 +139,9 @@ public class playersample : MonoBehaviourPunCallbacks
                 break;
             }
         }
+
         [PunRPC]
         void GOMI(){
             RandomMatchMaker.GameStartFlg = true;
-        }
-
-        [PunRPC]
-        void GOMI2(){
-            var te = ((time-PhotonNetwork.ServerTimestamp)/1000);
-            Text.text = te.ToString();
-            if(time-PhotonNetwork.ServerTimestamp<=0){//時間切れ
-                Panels.SetActive(true);//パネルを表示
-                result_text.text = "Your Win!";
-                PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
-                PhotonNetwork.Disconnect();//自分をサーバーから切断
-            }
         }
 }

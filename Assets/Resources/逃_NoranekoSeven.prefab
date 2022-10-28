@@ -5878,22 +5878,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b325ddf2e64aa243803ffb23320121e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animSpeed: 1
-  initSpeed: 0.1
-  ResultPanel: {fileID: 0}
-  GoToTitleButton: {fileID: 5745344339930063920, guid: 9dd65a382845cbf4f82c661693ade87d, type: 3}
   SpawnPoint:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  list:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  ResultPanel: {fileID: 0}
+  GoToTitleButton: {fileID: 5745344339930063920, guid: 9dd65a382845cbf4f82c661693ade87d, type: 3}
   Canvas: {fileID: 0}
   camera: {fileID: 0}
+  animSpeed: 1
   GameTime: 120000
 --- !u!1 &8171279476205707404
 GameObject:
