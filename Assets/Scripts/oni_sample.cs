@@ -9,18 +9,20 @@ public class oni_sample : MonoBehaviourPunCallbacks
 {
     private Rigidbody rb;
     public float speed = 5f;
+    private AnimatorStateInfo currentBaseState;
+    public float animSpeed = 1.5f;
     private float inputHorizontal;
     private float inputVertical;
     private Animator anim;
     private Text Text;
     private float time;
-    public int GameTime=120000;//カウントダウンの時間
+    public int GameTime=128000;//カウントダウンの時間
     private int SpawnCnt = 0;
     public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
     public GameObject[] list = {null,null,null,null};
 
     //プレイヤーキル関連
-    [SerializeField] private int PlayerPeople = 2; //プレイヤー人数なんで人数変わったら変えろ
+    [SerializeField] private int PlayerPeople = 4; //プレイヤー人数なんで人数変わったら変えろ
     private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
     private GameObject Panels;
     Text result_text; //リザルトテキスト
@@ -41,10 +43,9 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
-            PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
             inputHorizontal = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義
             inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
-            if(photonView.Owner.ActorNumber == 4){
+            if(RandomMatchMaker.GameStartFlg){
                 photonView.RPC(nameof(GOMI2),RpcTarget.All);
             }
             KASU();
@@ -63,11 +64,13 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
+        PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
         if(inputHorizontal==0 && inputVertical==0){
                 anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
             }else{
                 anim.SetFloat ("Speed", 1);//プレイヤーが移動しているときは走るアニメーションを再生する
             }
+
         // カメラの方向から、X-Z平面の単位ベクトルを取得
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
     
@@ -111,6 +114,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
             photonView.RPC(nameof(GOMI),RpcTarget.All);
             time = PhotonNetwork.ServerTimestamp;//サーバー時刻を取得
             time += GameTime;//カウントダウンの時間を加算しておく
+            
             SpawnCnt++;
             var actor = photonView.Owner.ActorNumber;
             switch(actor){
@@ -136,7 +140,8 @@ public class oni_sample : MonoBehaviourPunCallbacks
 
         [PunRPC]
         void GOMI2(){
-            Text.text = ((time-PhotonNetwork.ServerTimestamp)/1000).ToString();//残り時間の計算と表示(サーバー時刻と連動)
+            var te = ((time-PhotonNetwork.ServerTimestamp)/1000);
+            Text.text = te.ToString();
             if(time-PhotonNetwork.ServerTimestamp<=0){
                 Panels.SetActive(true);//パネルを表示
                 result_text.text = "Your Lose...";

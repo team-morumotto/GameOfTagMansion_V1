@@ -29,11 +29,6 @@ namespace MasterConfig{
             photonView.RPC(nameof(Numberofpeopleleft),RpcTarget.All);
         }
 
-        public override void OnPlayerEnteredRoom(Player newPlayer)
-        {
-            
-        }
-
         //残り人数の反映
         [PunRPC]
         private void Numberofpeopleleft(){
