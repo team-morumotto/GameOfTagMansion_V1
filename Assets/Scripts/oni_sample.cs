@@ -33,6 +33,9 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private int isExitCountA = 0;
     private int isExitCountB = 0;
     //#### ここまで変数置き場 ####//
+    //SE鳴らす用関連
+    public AudioClip[] SE;
+    public AudioSource audioSource;
     void Start(){
         isExitCountMax = 10;
         rb = GetComponent<Rigidbody>();
@@ -47,6 +50,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         SpawnPoint[1] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_01").gameObject;
         SpawnPoint[2] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_02").gameObject;
         SpawnPoint[3] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_03").gameObject;
+        audioSource = GetComponent<AudioSource>(); //SE鳴らすために取得
     }
 
     void Update(){
@@ -112,20 +116,17 @@ public class oni_sample : MonoBehaviourPunCallbacks
         }
 
         var p = col.gameObject.GetComponent<PhotonView>().Owner.NickName;
-        RpcSendMessage(p);
-
-    }
-
-    void RpcSendMessage(string p){
         if(p == PhotonNetwork.NickName){
             return;
         }
         catch_text.enabled = true;
         catch_text.text = p + "を捕まえた！";
         //Debug.Log(p + "を捕まえた！");
+        audioSource.PlayOneShot(SE[0]); 
         StartCoroutine("textwait",5f);
     }
-    //
+
+    //五秒たったらテキストを非表示にする
     IEnumerator textwait(float time)
     {
         yield return new WaitForSeconds(time);
@@ -150,8 +151,10 @@ public class oni_sample : MonoBehaviourPunCallbacks
     
         // 方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
+        
+        //時間が15秒以下の時に速度を上げる
         float nowspeed;
-        if(Timen < 30f){
+        if(Timen < 15f){
             nowspeed = speed * 2;
         }
         else{
