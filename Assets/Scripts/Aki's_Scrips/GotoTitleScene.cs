@@ -8,7 +8,7 @@ public class GotoTitleScene : MonoBehaviour
     public void GotoTitle(){
         SceneManager.LoadScene("TitleScene",LoadSceneMode.Single);
     }
-    public void exeend(){
+    public static void exeend(){
         //エディタの場合
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了

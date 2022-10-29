@@ -8,28 +8,31 @@ using System;
 
 public class oni_sample : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private int PlayerPeople = 4; //プレイヤー人数なんで人数変わったら変えろ
-    private Rigidbody rb;
-    private Animator anim;
-    private AnimatorStateInfo currentBaseState;
+    //## Unity オブジェクトリスト ##//
     private Text Text;
     Text result_text; //リザルトテキスト
     public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
     private GameObject Panels;
     public CinemachineFreeLook camera;
-    private float inputHorizontal;
-    private float inputVertical;
-    private float time;
-    private int SpawnCnt = 0;
-    private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
+    //## Character系の変数 ##//
+    private Animator anim;
+    private AnimatorStateInfo currentBaseState;
+    private Rigidbody rb;
     public float speed = 5f;
     public float animSpeed = 1.5f;
-    public int GameTime=120000;//カウントダウンの時間
+    private float inputHorizontal;
+    private float inputVertical;
+    //## ワールド等外部的変数 ##//
+    private int SpawnCnt = 0;
+    private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
     int CNT=0;
-    float Timen=60f;
-    public int Nokori_Player=3;
-
+    float Timen=60f;//カウントダウンの時間(ローカル時間が引かれるため可変)
+    private int isExitCountMax = 10;
+    private int isExitCountA = 0;
+    private int isExitCountB = 0;
+    //#### ここまで変数置き場 ####//
     void Start(){
+        isExitCountMax = 10;
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
@@ -91,10 +94,11 @@ public class oni_sample : MonoBehaviourPunCallbacks
     }
     void Oni_Game_End(){
         Timen = 0;
-        Text.text =0.ToString();
+        Text.text = (0).ToString();
         Panels.SetActive(true);
         PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
         PhotonNetwork.Disconnect();//ルームから退出
+
     }
 
     void FixedUpdate(){
@@ -105,10 +109,10 @@ public class oni_sample : MonoBehaviourPunCallbacks
         inputHorizontal = Input.GetAxis ("Horizontal");			// 入力デバイスの水平軸をhで定義
         inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
         if(inputHorizontal==0 && inputVertical==0){
-                anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
-            }else{
-                anim.SetFloat ("Speed", 1);//プレイヤーが移動しているときは走るアニメーションを再生する
-            }
+            anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
+        }else{
+            anim.SetFloat ("Speed", 1);//プレイヤーが移動しているときは走るアニメーションを再生する
+        }
 
         // カメラの方向から、X-Z平面の単位ベクトルを取得
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
@@ -133,6 +137,21 @@ public class oni_sample : MonoBehaviourPunCallbacks
             Application.Quit();//ゲームプレイ終了
         //なんかあったとき
         #endif
+    }
+
+    // 暫定処理として、10秒経過後に強制的にプログラムを終了する
+    void isExit() {
+        isExitCountA += 1;      // 毎フレームカウントアップ
+        if(isExitCountA >= 60){ // 60フレーム経過したら
+            isExitCountA = 0;   // カウントをリセット
+            isExitCountB += 1;  // 1秒経過したことにする
+        }
+        if(isExitCountB >= isExitCountMax){ // 10秒経過したら
+            isExitCountB = 0;               // カウントをリセット
+            isExitCountA = 0;               // カウントをリセット
+            PhotonNetwork.LeaveRoom();      // ルームから退出
+            exeend();                       // プログラムを終了する
+        }
     }
 
     [PunRPC]
