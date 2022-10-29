@@ -51,7 +51,10 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
 	//Photonマスターサーバー接続
     void Connect() {
-        Number = GoToChooseChara.PlayMode;				//GotoGameSceneから鬼か逃げる側かを識別するナンバーを受け取る
+        if(Input.GetKey(KeyCode.O)){
+            Debug.Log("Oキーは押されています");
+        }
+        Number = GoToChooseChara.PlayMode;      //GotoGameSceneから鬼か逃げる側かを識別するナンバーを受け取る
         PhotonNetwork.ConnectUsingSettings();	//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
     }
 
