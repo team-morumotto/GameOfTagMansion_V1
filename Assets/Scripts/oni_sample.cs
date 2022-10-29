@@ -141,16 +141,16 @@ public class oni_sample : MonoBehaviourPunCallbacks
 
     // 暫定処理として、10秒経過後に強制的にプログラムを終了する
     void isExit() {
-        isExitCountA += 1;      // 毎フレームカウントアップ
-        if(isExitCountA >= 60){ // 60フレーム経過したら
-            isExitCountA = 0;   // カウントをリセット
-            isExitCountB += 1;  // 1秒経過したことにする
+        isExitCountA += 1;		// 毎フレームカウントアップ
+        if(isExitCountA >= 60){	// 60フレーム経過したら
+            isExitCountA = 0;	// カウントをリセット
+            isExitCountB += 1;	// 1秒経過したことにする
         }
-        if(isExitCountB >= isExitCountMax){ // 10秒経過したら
-            isExitCountB = 0;               // カウントをリセット
-            isExitCountA = 0;               // カウントをリセット
-            PhotonNetwork.LeaveRoom();      // ルームから退出
-            exeend();                       // プログラムを終了する
+        if(isExitCountB >= isExitCountMax){	// 10秒経過したら
+            isExitCountB = 0;				// カウントをリセット
+            isExitCountA = 0;				// カウントをリセット
+            PhotonNetwork.LeaveRoom();		// ルームから退出
+            GotoTitleScene.exeend();		// プログラムを終了する
         }
     }
 

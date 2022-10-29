@@ -136,7 +136,7 @@ public class playersample : MonoBehaviourPunCallbacks
 
         anim.speed = animSpeed;
         currentBaseState = anim.GetCurrentAnimatorStateInfo (0);
-        Debug.Log("Fixed");
+        //Debug.Log("Fixed");
         // カメラの方向から、X-Z平面の単位ベクトルを取得
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
@@ -179,7 +179,7 @@ public class playersample : MonoBehaviourPunCallbacks
             isExitCountB = 0;               // カウントをリセット
             isExitCountA = 0;               // カウントをリセット
             PhotonNetwork.LeaveRoom();      // ルームから退出
-            exeend();                       // プログラムを終了する
+            GotoTitleScene.exeend();		// プログラムを終了する
         }
     }
 
