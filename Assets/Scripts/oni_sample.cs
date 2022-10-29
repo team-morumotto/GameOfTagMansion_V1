@@ -19,6 +19,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private AnimatorStateInfo currentBaseState;
     private Rigidbody rb;
     public float speed = 5f;
+    public static string RoomTest = "Room";
     public float animSpeed = 1.5f;
     private float inputHorizontal;
     private float inputVertical;
@@ -47,6 +48,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     }
 
     void Update(){
+        Debug.Log(PhotonNetwork.CurrentRoom.Name);
         if(!photonView.IsMine){
             return;
         }
@@ -58,11 +60,11 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Timen -= Time.deltaTime;
         Text.text= Mathf.Floor(Timen).ToString();          //stringにキャストしtextに代入
         if(Timen <= 0 && PhotonNetwork.PlayerList.Length > 1){
-            result_text.text = "You Lose...";
+            result_text.text = "全員捕まえられなかった...";
             Oni_Game_End();
         }
         if(PhotonNetwork.PlayerList.Length==1){
-            result_text.text = "You Win!!";
+            result_text.text = "全員捕まえられた！";
             Oni_Game_End();
         }
     }
@@ -98,7 +100,21 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Panels.SetActive(true);
         PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
         PhotonNetwork.Disconnect();//ルームから退出
+    }
 
+    void OnCollisionEnter(Collision col){
+        if(col.gameObject.GetComponent<PhotonView>() == false){
+            return;
+        }
+        var p = col.gameObject.GetComponent<PhotonView>().Owner.NickName;
+        photonView.RPC(nameof(RpcSendMessage), RpcTarget.All, p);
+    }
+
+    void RpcSendMessage(string p){
+        if(p == PhotonNetwork.NickName){
+            return;
+        }
+        Debug.Log(p + "を捕まえた！");
     }
 
     void FixedUpdate(){

@@ -102,7 +102,7 @@ public class playersample : MonoBehaviourPunCallbacks
             Timen = 0;                        //Timenに0を代入
             Text.text =(0).ToString();          //残り時間を0に上書きし表示
             Panels.SetActive(true);           //パネルを表示
-            result_text.text = "You Win!";
+            result_text.text = "逃げ切った！";
             PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
             PhotonNetwork.Disconnect();//ルームから退出
             isExit();
@@ -113,7 +113,7 @@ public class playersample : MonoBehaviourPunCallbacks
         if(col.gameObject.GetComponent<oni_sample>() == true){  //あたったオブジェクトにOni_Sampleがついているかどうか
             Text.text = 0.ToString();
             Panels.SetActive(true);                             //パネルを表示
-            result_text.text = "Your Lose…";
+            result_text.text = "捕まった！！…";
             PhotonNetwork.Destroy(gameObject);                  //自分を全体から破棄
             PhotonNetwork.Disconnect();//ルームから退出
             //Invoke("Out_After_Delay", 3.0f);                    //3秒後にOut_After_Delay関数を呼び出す

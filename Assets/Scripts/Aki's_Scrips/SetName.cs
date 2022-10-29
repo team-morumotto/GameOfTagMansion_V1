@@ -23,7 +23,6 @@ public class SetName : MonoBehaviourPunCallbacks
     void SetNameAfter(string name){
         onEndEditFLG = true;//名前入力が行われたらRandomMatchMakerスクリプトのConnect関数を実行するためのフラグ
         NAME = name;//サーバーに接続した後に生成されるキャラクターに名前を付けるために名前を受け取る(UnityChanのデフォルトRgidスクリプトで取得)
-        Connect.SetActive(true);//netWorkMakerオブジェクトをtrue
         SetNamePanel.SetActive(false);//名前入力パネルOFF
     }
 }

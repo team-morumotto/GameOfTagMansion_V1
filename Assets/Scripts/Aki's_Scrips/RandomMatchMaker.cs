@@ -38,19 +38,21 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     public static int unnko;
     public GameObject Oni_Button;
+    int ConnectFlg=0;
     void Update() {
         //SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
-        if(SetName.onEndEditFLG) {
+        if(SetName.onEndEditFLG && ConnectFlg == 0) {
             Connect();
+            ConnectFlg = 1;
         }
         if (PhotonNetwork.CurrentRoom.PlayerCount == 4) {
-            Debug.Log("Connect");
             photonView.RPC(nameof(sinekasu),RpcTarget.All);
         }
     }
 
 	//Photonマスターサーバー接続
     void Connect() {
+        Debug.Log(true);
         if(Input.GetKey(KeyCode.O)){
             Debug.Log("Oキーは押されています");
         }
@@ -60,20 +62,23 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     //マスターサーバ？に接続した時
     public override void OnConnectedToMaster() {
-        PhotonNetwork.JoinRandomRoom(); //ランダムにルームに接続
+        Debug.Log(oni_sample.RoomTest);
+        PhotonNetwork.JoinRoom("Bakakasu"); //ランダムにルームに接続
     }
 
 	//ロビーへの入室に失敗した場合
     public override void OnJoinedLobby() {
-        PhotonNetwork.JoinRandomRoom(); //ランダムにルームに再接続
+        Debug.Log(oni_sample.RoomTest);
+        PhotonNetwork.JoinRoom("Bakakasu"); //ランダムにルームに再接続
     }
 
 	//ルームに参加できなかった場合
-    public override void OnJoinRandomFailed(short returnCode, string message) {
+    public override void OnJoinRoomFailed(short returnCode, string message) {
+        Debug.Log(oni_sample.RoomTest);
         RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
         roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
 
-        PhotonNetwork.CreateRoom("bakakasu", roomOptions);	//ルームを作成(ルームの名前を指定しない場合はnullを指定)
+        PhotonNetwork.CreateRoom("Bakakasu", roomOptions);	//ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
 
 	//ルームに参加した時
