@@ -4336,6 +4336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47fe364845598b14d8dca857c420037f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  catch_text: {fileID: 0}
   SpawnPoint:
   - {fileID: 0}
   - {fileID: 0}

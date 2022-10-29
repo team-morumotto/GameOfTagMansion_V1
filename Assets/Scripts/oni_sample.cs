@@ -11,7 +11,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     //## Unity オブジェクトリスト ##//
     private Text Text;
     private Text result_text; //リザルトテキスト
-    private Text catch_text; //捕まったとき用
+    public Text catch_text; //捕まったとき用
     public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
     private GameObject Panels;
     public CinemachineFreeLook camera;
@@ -130,7 +130,6 @@ public class oni_sample : MonoBehaviourPunCallbacks
         }
         catch_text.enabled = true;
         catch_text.text = p + "を捕まえた！";
-        //Debug.Log(p + "を捕まえた！");
         audioSource.PlayOneShot(SE[0]);
         StartCoroutine("textwait",5f);
     }
