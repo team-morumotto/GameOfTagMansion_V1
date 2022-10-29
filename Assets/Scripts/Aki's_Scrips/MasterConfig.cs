@@ -18,7 +18,7 @@ public class MasterConfig : MonoBehaviourPunCallbacks {
     public int j = 0;                                   //残り人数生やす用？
     public Text peopletext;
     private bool Maxpeople = false;
-    public static float GameTimer = 120.0f;             // カウントダウンの時間(ローカル時間が引かれるため可変)
+    public static float GameTimer = 60.0f;             // カウントダウンの時間(ローカル時間が引かれるため可変)
 
     void Start() {
         Application.targetFrameRate = 60; // 60FPSに固定する

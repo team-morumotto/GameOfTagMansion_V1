@@ -58,7 +58,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     //マスターサーバに接続した時
     public override void OnConnectedToMaster() {
         if(DebugMode){
-            PhotonNetwork.JoinRoom("DebugRoom"); //デバッグルームに接続
+            PhotonNetwork.JoinRoom(oni_sample.RoomTest); //デバッグルームに接続
         }
         else{
             PhotonNetwork.JoinRandomRoom(); //ランダムにルームに接続
@@ -68,18 +68,17 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 	//ロビーへの入室に失敗した場合
     public override void OnJoinedLobby() {
         if(DebugMode){
-            PhotonNetwork.JoinRoom("DebugRoom"); //デバッグルームに接続
+            PhotonNetwork.JoinRoom(oni_sample.RoomTest); //デバッグルームに接続
         }
         else{
             PhotonNetwork.JoinRandomRoom(); //ランダムにルームに接続
         }
     }
-
     public override void OnJoinRandomFailed(short returnCode, string message) {
         // ランダムで参加できるルームが存在しないなら、新規でルームを作成する
-        RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
-        roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
-        PhotonNetwork.CreateRoom(null,roomOptions);     //ルームを作成(ルームの名前を指定しない場合はnullを指定)
+        RoomOptions roomOptions = new RoomOptions();	         //ルームをインスタンス化
+        roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)
+        PhotonNetwork.CreateRoom(null,roomOptions);              //ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
 
 	//ルームに参加できなかった場合
@@ -87,13 +86,13 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         if(DebugMode){
             RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
             roomOptions.IsVisible = false;
-            roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
+            roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)
 
-            PhotonNetwork.CreateRoom("DebugRoom", roomOptions);	//ルームを作成
+            PhotonNetwork.CreateRoom(oni_sample.RoomTest , roomOptions);	//ルームを作成
         }
         else{
             RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
-            roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
+            roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)						//ルーム接続の最大人数
 
             PhotonNetwork.CreateRoom(null, roomOptions);	//ルームを作成
         }
@@ -119,8 +118,10 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
                 break;
         }
 		//ルームに入室している人数がルームの最大人数になったら
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 4) {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers) {
             PhotonNetwork.CurrentRoom.IsOpen = false; //ルームを閉める
+            PhotonNetwork.CurrentRoom.IsVisible = false; //ルームを非表示にする
+            GameStartFlg = true;
         }
     }
     [PunRPC]

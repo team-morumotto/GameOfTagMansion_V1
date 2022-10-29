@@ -10,6 +10,7 @@ using System;
 public class playersample : MonoBehaviourPunCallbacks
 {
     //## Unity オブジェクトリスト ##//
+    Text Text;
     private Text result_text; //リザルトテキスト
     private GameObject Panels;
     public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
@@ -25,7 +26,7 @@ public class playersample : MonoBehaviourPunCallbacks
     private float moveSpeed = 5.0f;
 
     //## ワールド等外部的変数 ##//
-	int CNT=0;
+	bool SpawnFlg = true;
     public int Nokori_Player=3;
     private int isExitCountMax = 10;	// Exitカウントの待機秒数
     private int isExitCountA = 0;		// Exitカウントの秒
@@ -35,7 +36,6 @@ public class playersample : MonoBehaviourPunCallbacks
     private int isTimeCountB = 0;		// 時計の分カウント
     private int isTimeCountC = 0;		// 時計のミリ秒カウント(1000ms基準)
     //#### ここまで変数置き場 ####//
-    Text Text;
     void Start () {
         // カウント系の処理
         isExitCountMax = 10;								                // Exitカウントの最大秒数
@@ -57,6 +57,7 @@ public class playersample : MonoBehaviourPunCallbacks
     }
 
     void Update () {
+
         if(!photonView.IsMine){
             return;
         }
@@ -65,19 +66,21 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
+        if(gameObject.transform.position.y <= -100f){
+            SpawnFlg = true;
+        }
         Player_Win();//プレイヤーが勝つための関数
     }
 
     void Character_Spawn(){
-        Debug.Log("PLAYER"+RandomMatchMaker.GameStartFlg);
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
         photonView.RPC(nameof(Game_Now_Update),RpcTarget.All);
-        if(CNT!=0){
+        if(!SpawnFlg){
             return;
         }
-        CNT++;//以下の関数内の処理を一回だけ行うための処理
+        SpawnFlg = false;//以下の関数内の処理を一回だけ行うための処理
 
         var actor = photonView.Owner.ActorNumber;//ルームに入ってきたプレイヤーの入室順番号を入手
         switch(actor){//各プレイヤーの入室順番号によってスポーンポイントを変更

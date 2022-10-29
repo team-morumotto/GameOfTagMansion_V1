@@ -30,7 +30,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     //## ワールド等外部的変数 ##//
     private int SpawnCnt = 0;
     private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
-    int CNT=0;
+    bool SpawnFlg = true;
     private int isExitCountMax = 10;	// Exitカウントの待機秒数
     private int isExitCountA = 0;		// Exitカウントの秒
     private int isExitCountB = 0;		// Exitカウントのミリ秒(60ms基準)
@@ -45,6 +45,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         isTimeMaster = MasterConfig.GameTimer;				                // ゲームの時間をMasterConfigから同期
         isTimeCountA = Mathf.FloorToInt(isTimeMaster) / 60 - 1;	            // 時計の秒カウントを設定
         isTimeCountB = Mathf.FloorToInt(isTimeMaster) - 60 * (isTimeCountA);// 時計の分カウントを設定
+
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
@@ -61,7 +62,6 @@ public class oni_sample : MonoBehaviourPunCallbacks
     }
 
     void Update(){
-        Debug.Log(PhotonNetwork.CurrentRoom.Name);
         if(!photonView.IsMine){
             return;
         }
@@ -69,6 +69,9 @@ public class oni_sample : MonoBehaviourPunCallbacks
         //ゲーム中かどうか
         if(!RandomMatchMaker.GameStartFlg){
             return;
+        }
+        if(gameObject.transform.position.y <= -100f){
+            SpawnFlg = true;
         }
 
         isTimeCount(Mathf.FloorToInt(isTimeMaster)); // 時間カウント関数
@@ -83,15 +86,14 @@ public class oni_sample : MonoBehaviourPunCallbacks
         }
     }
     void Character_Spawn(){
-        Debug.Log("ONI"+RandomMatchMaker.GameStartFlg);
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
         photonView.RPC(nameof(Game_Now_Update),RpcTarget.All);
-        if(CNT!=0){
+        if(!SpawnFlg){
             return;
         }
-        CNT++;//以下の関数内の処理を一回だけ行うための処理
+        SpawnFlg = false;//以下の関数内の処理を一回だけ行うための処理
 
         var actor = photonView.Owner.ActorNumber;//ルームに入ってきたプレイヤーの入室順番号を入手
         switch(actor){//各プレイヤーの入室順番号によってスポーンポイントを変更

@@ -4342,11 +4342,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   camera: {fileID: 0}
-  speed: 5
-  animSpeed: 1.5
   SE:
   - {fileID: 8300000, guid: dd60c8a28a7258f46bb9bc2b9ca4359e, type: 3}
   audioSource: {fileID: 0}
+  speed: 5
+  animSpeed: 1.5
 --- !u!82 &6587082006339739062
 AudioSource:
   m_ObjectHideFlags: 0
