@@ -42,10 +42,10 @@ public class playersample : MonoBehaviourPunCallbacks
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
-        SpawnPoint[0] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint").gameObject;
-        SpawnPoint[1] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_01").gameObject;
-        SpawnPoint[2] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_02").gameObject;
-        SpawnPoint[3] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_03").gameObject;
+        SpawnPoint[0] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint").gameObject;
+        SpawnPoint[1] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_01").gameObject;
+        SpawnPoint[2] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_02").gameObject;
+        SpawnPoint[3] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_03").gameObject;
     }
 
     void Update () {
@@ -96,12 +96,12 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
-        Timen -= Time.deltaTime;              //残り時間のカウントダウン
+        Timen -= Time.deltaTime;                           //プレイヤーの残り時間
         Text.text= Mathf.Floor(Timen).ToString();          //stringにキャストしtextに代入
-        if(Timen <= 0){                       //残り時間0秒を下回ると
-            Timen = 0;                        //Timenに0を代入
-            Text.text =(0).ToString();          //残り時間を0に上書きし表示
-            Panels.SetActive(true);           //パネルを表示
+        if(Timen <= 0){                                    //残り時間0秒を下回ると
+            Timen = 0;                                     //Timenに0を代入
+            Text.text =(0).ToString();                     //残り時間を0に上書きし表示
+            Panels.SetActive(true);                        //パネルを表示
             result_text.text = "逃げ切った！";
             PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
             PhotonNetwork.Disconnect();//ルームから退出

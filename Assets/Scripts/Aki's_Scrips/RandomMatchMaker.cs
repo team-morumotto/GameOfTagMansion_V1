@@ -25,25 +25,19 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public GameObject[] OniObject = {null,null,null};		 //鬼オブジェクト
     public GameObject[] PlayerObject = {null,null,null};	//プレイヤーオブジェクト
     public GameObject[] SpawnPoint;							 //キャラクタースポーンポイント
-    public GameObject[] Character = {null,null,null,null};	//生成したキャラクターを格納する配列
-    public GameObject MasterConfig;							//マスターコンフィグオブジェクト
-    public Text Text;
     private int Number;										//鬼側か逃げる側かを識別するナンバー
-    public static int gomi=0;
-    public static int i = -1;								 //ナンバー
-    public float currentTime;
     public static bool GameStartFlg = false;//ゲーム開始フラグ
     public static bool CharacterSpawnFlg =false;
     public static bool kasu = false;
 
-    public static int unnko;
-    public GameObject Oni_Button;
-    int ConnectFlg=0;
+    bool ConnectFlg = true;
+    bool DebugMode = false;
+
     void Update() {
         //SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
-        if(SetName.onEndEditFLG && ConnectFlg == 0) {
+        if(SetName.onEndEditFLG && ConnectFlg) {
             Connect();
-            ConnectFlg = 1;
+            ConnectFlg = false;
         }
         if (PhotonNetwork.CurrentRoom.PlayerCount == 4) {
             photonView.RPC(nameof(sinekasu),RpcTarget.All);
@@ -53,32 +47,58 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 	//Photonマスターサーバー接続
     void Connect() {
         Debug.Log(true);
-        if(Input.GetKey(KeyCode.O)){
-            Debug.Log("Oキーは押されています");
+        if(Input.GetKey(KeyCode.LeftControl)){
+            DebugMode = true;
+            Debug.Log("デバッグモード");
         }
         Number = GoToChooseChara.PlayMode;      //GotoGameSceneから鬼か逃げる側かを識別するナンバーを受け取る
         PhotonNetwork.ConnectUsingSettings();	//Photonネットワークへの接続処理部分(これがないとフォトンは使用できない)
     }
 
-    //マスターサーバ？に接続した時
+    //マスターサーバに接続した時
     public override void OnConnectedToMaster() {
-        Debug.Log(oni_sample.RoomTest);
-        PhotonNetwork.JoinRoom("Bakakasu"); //ランダムにルームに接続
+        if(DebugMode){
+            PhotonNetwork.JoinRoom("DebugRoom"); //デバッグルームに接続
+        }
+        else{
+            PhotonNetwork.JoinRandomRoom(); //ランダムにルームに接続
+        }
     }
 
 	//ロビーへの入室に失敗した場合
     public override void OnJoinedLobby() {
-        Debug.Log(oni_sample.RoomTest);
-        PhotonNetwork.JoinRoom("Bakakasu"); //ランダムにルームに再接続
+        if(DebugMode){
+            PhotonNetwork.JoinRoom("DebugRoom"); //デバッグルームに接続
+        }
+        else{
+            PhotonNetwork.JoinRandomRoom(); //ランダムにルームに接続
+        }
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message) {
+        // ランダムで参加できるルームが存在しないなら、新規でルームを作成する
+        RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
+        roomOptions.IsVisible = false;
+        roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
+        PhotonNetwork.CreateRoom(null,roomOptions);     //ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
 
 	//ルームに参加できなかった場合
     public override void OnJoinRoomFailed(short returnCode, string message) {
-        Debug.Log(oni_sample.RoomTest);
-        RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
-        roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
+        if(DebugMode){
+            RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
+            roomOptions.IsVisible = false;
+            roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
 
-        PhotonNetwork.CreateRoom("Bakakasu", roomOptions);	//ルームを作成(ルームの名前を指定しない場合はnullを指定)
+            PhotonNetwork.CreateRoom("DebugRoom", roomOptions);	//ルームを作成
+        }
+        else{
+            RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
+            roomOptions.IsVisible = false;
+            roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
+
+            PhotonNetwork.CreateRoom(null, roomOptions);	//ルームを作成
+        }
     }
 
 	//ルームに参加した時

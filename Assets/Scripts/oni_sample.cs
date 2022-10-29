@@ -18,7 +18,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private Animator anim;
     private AnimatorStateInfo currentBaseState;
     private Rigidbody rb;
-    public float speed = 5f;
+    public float speed = 6.25f;//鬼の移動速度
     public static string RoomTest = "Room";
     public float animSpeed = 1.5f;
     private float inputHorizontal;
@@ -41,10 +41,10 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
-        SpawnPoint[0] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint").gameObject;
-        SpawnPoint[1] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_01").gameObject;
-        SpawnPoint[2] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_02").gameObject;
-        SpawnPoint[3] = GameObject.Find("/stage2.0").transform.Find("SpawnPoint_03").gameObject;
+        SpawnPoint[0] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint").gameObject;
+        SpawnPoint[1] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_01").gameObject;
+        SpawnPoint[2] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_02").gameObject;
+        SpawnPoint[3] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_03").gameObject;
     }
 
     void Update(){
@@ -57,7 +57,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
             return;
         }
         Character_Spawn();
-        Timen -= Time.deltaTime;
+        Timen -= Time.deltaTime;                           //鬼の残り時間
         Text.text= Mathf.Floor(Timen).ToString();          //stringにキャストしtextに代入
         if(Timen <= 0 && PhotonNetwork.PlayerList.Length > 1){
             result_text.text = "全員捕まえられなかった...";
