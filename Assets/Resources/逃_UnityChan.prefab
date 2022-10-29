@@ -411,6 +411,7 @@ MonoBehaviour:
   - {fileID: 0}
   camera: {fileID: 0}
   animSpeed: 1
+  Nokori_Player: 3
 --- !u!4 &2485297229075990477 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2563240036833839208, guid: e335e27274b10cd4dad6cca08e74e54b, type: 3}
