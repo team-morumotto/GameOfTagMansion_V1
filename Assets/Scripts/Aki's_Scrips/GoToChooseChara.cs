@@ -8,6 +8,7 @@ public class GoToChooseChara : MonoBehaviour {
     public static int PlayMode = 1;
     public static int Characters = 0;
     private int choose = 0;
+    public GameObject BackObject = null;
     public GameObject NextObject = null;
 
     //タイトルの参加ボタンを押すとシーンが遷移
@@ -18,7 +19,10 @@ public class GoToChooseChara : MonoBehaviour {
         PlayMode = choose;
         NextObject.SetActive(true);
     }
-
+    public void isBackCharaToPlayMode() {
+        NextObject.SetActive(false);
+        BackObject.SetActive(true);
+    }
     public void isChooseCharacter(int choose) {
         Characters = choose;
         SceneManager.LoadScene("GameScene",LoadSceneMode.Single);
