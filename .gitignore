@@ -67,3 +67,9 @@ crashlytics-build.properties
 *.zip
 *.bat
 .erp
+[Ee]ditor/
+[Ss]creen[Ss]hot/
+[Ss]creen[Ss]hots/
+Assets/Editor.meta
+Assets/Resources/fonts/UDEVGothicJPDOC-Bold SDF.asset
+Assets/Resources/fonts/UDEVGothicJPDOC-Bold SDF.asset.meta
