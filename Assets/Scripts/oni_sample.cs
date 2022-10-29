@@ -27,6 +27,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     public int GameTime=120000;//カウントダウンの時間
     int CNT=0;
     float Timen=60f;
+    public int Nokori_Player=3;
 
     void Start(){
         rb = GetComponent<Rigidbody>();
@@ -53,11 +54,11 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Character_Spawn();
         Timen -= Time.deltaTime;
         Text.text= Mathf.Floor(Timen).ToString();          //stringにキャストしtextに代入
-        if(Timen <= 0){
+        if(Timen <= 0 && PhotonNetwork.PlayerList.Length > 1){
             result_text.text = "You Lose...";
             Oni_Game_End();
         }
-        if(Timen>=0 && PhotonNetwork.PlayerList.Length == 1){
+        if(PhotonNetwork.PlayerList.Length==1){
             result_text.text = "You Win!!";
             Oni_Game_End();
         }
@@ -93,7 +94,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Text.text =0.ToString();
         Panels.SetActive(true);
         PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
-        Invoke("Out_After_Delay", 3.0f);  //3秒後にOut_After_Delay関数を呼び出す
+        PhotonNetwork.Disconnect();//ルームから退出
     }
 
     void FixedUpdate(){
@@ -138,4 +139,5 @@ public class oni_sample : MonoBehaviourPunCallbacks
     void Game_Now_Update(){
         RandomMatchMaker.GameStartFlg = true;
     }
+
 }

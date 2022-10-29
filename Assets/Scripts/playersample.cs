@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 using UnityEngine.UI;
+using UnityEditor;
 using System;
 
 public class playersample : MonoBehaviourPunCallbacks
@@ -23,6 +24,7 @@ public class playersample : MonoBehaviourPunCallbacks
     private float moveSpeed = 5.0f;
 	int CNT=0;
 	float Timen=60f;
+    public int Nokori_Player=3;
 
     Text Text;
     void Start () {
@@ -43,6 +45,15 @@ public class playersample : MonoBehaviourPunCallbacks
     void Update () {
         if(!photonView.IsMine){
             return;
+        }
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            #if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+            //ビルドの場合
+            #else
+                Application.Quit();//ゲームプレイ終了
+            //なんかあったとき
+            #endif
         }
 		Character_Spawn();
         Player_Win();//プレイヤーが勝つための関数
@@ -87,7 +98,7 @@ public class playersample : MonoBehaviourPunCallbacks
             Panels.SetActive(true);           //パネルを表示
             result_text.text = "You Win!";
             PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
-            Invoke("Out_After_Delay", 3.0f);  //3秒後にOut_After_Delay関数を呼び出す
+            PhotonNetwork.Disconnect();//ルームから退出
         }
     }
 
@@ -130,10 +141,11 @@ public class playersample : MonoBehaviourPunCallbacks
     void Player_Lose(Collision col) {
         //捕まったとき
         if(col.gameObject.GetComponent<oni_sample>() == true){  //あたったオブジェクトにOni_Sampleがついているかどうか
-            Text.text =0.ToString();
+            Text.text = 0.ToString();
             Panels.SetActive(true);                             //パネルを表示
             result_text.text = "Your Lose…";
             PhotonNetwork.Destroy(gameObject);                  //自分を全体から破棄
+            PhotonNetwork.Disconnect();//ルームから退出
             Invoke("Out_After_Delay", 3.0f);                    //3秒後にOut_After_Delay関数を呼び出す
         }
     }

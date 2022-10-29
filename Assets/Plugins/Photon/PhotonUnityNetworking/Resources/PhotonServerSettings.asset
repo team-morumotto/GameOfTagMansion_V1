@@ -57,6 +57,7 @@ MonoBehaviour:
   - Numberofpeopleleft
   - KUSO
   - Game_Now_Update
+  - Nokri_Player
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
