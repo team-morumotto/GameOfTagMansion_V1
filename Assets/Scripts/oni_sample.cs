@@ -10,7 +10,8 @@ public class oni_sample : MonoBehaviourPunCallbacks
 {
     //## Unity オブジェクトリスト ##//
     private Text Text;
-    Text result_text; //リザルトテキスト
+    private Text result_text; //リザルトテキスト
+    private Text catch_text; //捕まったとき用
     public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
     private GameObject Panels;
     public CinemachineFreeLook camera;
@@ -41,6 +42,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
+        catch_text = GameObject.Find("/Canvas").transform.Find("logtext").gameObject.GetComponent<Text>();
         SpawnPoint[0] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint").gameObject;
         SpawnPoint[1] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_01").gameObject;
         SpawnPoint[2] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_02").gameObject;
@@ -106,17 +108,27 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(col.gameObject.GetComponent<PhotonView>() == false){
             return;
         }
+
         var p = col.gameObject.GetComponent<PhotonView>().Owner.NickName;
         photonView.RPC(nameof(RpcSendMessage), RpcTarget.All, p);
+
     }
 
     void RpcSendMessage(string p){
         if(p == PhotonNetwork.NickName){
             return;
         }
-        Debug.Log(p + "を捕まえた！");
+        catch_text.enabled = true;
+        catch_text.text = p + "を捕まえた！";
+        //Debug.Log(p + "を捕まえた！");
+        StartCoroutine("textwait",5f);
     }
-
+    //
+    IEnumerator textwait(float time)
+    {
+        yield return new WaitForSeconds(time);
+        catch_text.enabled = false;
+    }
     void FixedUpdate(){
         if(!photonView.IsMine){
             return;
@@ -135,9 +147,15 @@ public class oni_sample : MonoBehaviourPunCallbacks
     
         // 方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
-    
+        float nowspeed;
+        if(Timen < 30f){
+            nowspeed = speed * 2;
+        }
+        else{
+            nowspeed = speed;
+        }
         // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-        rb.velocity = moveForward * speed + new Vector3(0, rb.velocity.y, 0);
+        rb.velocity = moveForward * nowspeed + new Vector3(0, rb.velocity.y, 0);
     
         // キャラクターの向きを進行方向に
         if (moveForward != Vector3.zero) {
