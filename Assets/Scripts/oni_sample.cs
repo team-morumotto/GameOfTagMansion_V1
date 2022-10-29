@@ -15,6 +15,9 @@ public class oni_sample : MonoBehaviourPunCallbacks
     public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
     private GameObject Panels;
     public CinemachineFreeLook camera;
+    //SE鳴らす用関連
+    public AudioClip[] SE;
+    public AudioSource audioSource;
     //## Character系の変数 ##//
     private Animator anim;
     private AnimatorStateInfo currentBaseState;
@@ -28,16 +31,20 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private int SpawnCnt = 0;
     private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
     int CNT=0;
-    float Timen=60f;//カウントダウンの時間(ローカル時間が引かれるため可変)
-    private int isExitCountMax = 10;
-    private int isExitCountA = 0;
-    private int isExitCountB = 0;
+    private int isExitCountMax = 10;	// Exitカウントの待機秒数
+    private int isExitCountA = 0;		// Exitカウントの秒
+    private int isExitCountB = 0;		// Exitカウントのミリ秒(60ms基準)
+    private float isTimeMaster = 0.0f;	// MasterConfigから同期するための変数
+    private int isTimeCountA = 0;		// 時計の秒カウント
+    private int isTimeCountB = 0;		// 時計の分カウント
+    private int isTimeCountC = 0;		// 時計のミリ秒カウント(1000ms基準)
     //#### ここまで変数置き場 ####//
-    //SE鳴らす用関連
-    public AudioClip[] SE;
-    public AudioSource audioSource;
     void Start(){
-        isExitCountMax = 10;
+        // カウント系の処理
+        isExitCountMax = 10;								                // Exitカウントの最大秒数
+        isTimeMaster = MasterConfig.GameTimer;				                // ゲームの時間をMasterConfigから同期
+        isTimeCountA = Mathf.FloorToInt(isTimeMaster) / 60 - 1;	            // 時計の秒カウントを設定
+        isTimeCountB = Mathf.FloorToInt(isTimeMaster) - 60 * (isTimeCountA);// 時計の分カウントを設定
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
@@ -64,9 +71,9 @@ public class oni_sample : MonoBehaviourPunCallbacks
             return;
         }
 
-        Timen -= Time.deltaTime;                           //鬼の残り時間
-        Text.text= Mathf.Floor(Timen).ToString();          //stringにキャストしtextに代入
-        if(Timen <= 0 && PhotonNetwork.PlayerList.Length > 1){
+        isTimeCount(Mathf.FloorToInt(isTimeMaster)); // 時間カウント関数
+
+        if(isTimeMaster <= 0 && PhotonNetwork.PlayerList.Length > 1){
             result_text.text = "全員捕まえられなかった...";
             Oni_Game_End();
         }
@@ -103,7 +110,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         }
     }
     void Oni_Game_End(){
-        Timen = 0;
+        isTimeMaster = 0;
         Text.text = (0).ToString();
         Panels.SetActive(true);
         PhotonNetwork.Destroy(gameObject);//自分を全体から破棄
@@ -122,7 +129,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         catch_text.enabled = true;
         catch_text.text = p + "を捕まえた！";
         //Debug.Log(p + "を捕まえた！");
-        audioSource.PlayOneShot(SE[0]); 
+        audioSource.PlayOneShot(SE[0]);
         StartCoroutine("textwait",5f);
     }
 
@@ -148,13 +155,13 @@ public class oni_sample : MonoBehaviourPunCallbacks
 
         // カメラの方向から、X-Z平面の単位ベクトルを取得
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-    
+
         // 方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
-        
+
         //時間が15秒以下の時に速度を上げる
         float nowspeed;
-        if(Timen < 15f){
+        if(isTimeMaster < 15f){
             nowspeed = speed * 2;
         }
         else{
@@ -162,7 +169,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         }
         // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
         rb.velocity = moveForward * nowspeed + new Vector3(0, rb.velocity.y, 0);
-    
+
         // キャラクターの向きを進行方向に
         if (moveForward != Vector3.zero) {
             transform.rotation = Quaternion.LookRotation(moveForward);
@@ -192,6 +199,36 @@ public class oni_sample : MonoBehaviourPunCallbacks
             PhotonNetwork.LeaveRoom();		// ルームから退出
             GotoTitleScene.exeend();		// プログラムを終了する
         }
+    }
+
+    /* 処理内容
+        isTimeCountA = Mathf.FloorToInt(isTimeMaster) / 60;
+        isTimeCountB = Mathf.FloorToInt(isTimeMaster) - (60 * isExitCountA);
+        isTimeCountC = isTimeMaster - Mathf.FloorToInt(isTimeMaster) * 100; //小数点以下を切り捨て
+    */
+
+    // README この順番は計算されつくされた配置です。変更しないでください。
+    // ※IntTimeMasterはIntに変換したisTimeMasterです。省略のために使用しています
+    void isTimeCount(int IntTimeMaster) {
+        isTimeMaster -= Time.deltaTime; //鬼の残り時間を計算
+
+        // 秒数カウントダウン
+		if(IntTimeMaster % 60 == 0) isTimeCountB = 0;				// 60秒のときだけ0を表示する
+        else isTimeCountB = IntTimeMaster - (60 * (isTimeCountA));	// 60秒未満のときは残り秒数を表示する
+
+        // 分数カウントダウン
+        if(IntTimeMaster % 60 == 0 && isTimeCountA == 0) isTimeCountA = 0;		// 1分減算を適用しない置換処理を回す
+		else if(IntTimeMaster % 60 == 0) isTimeCountA = IntTimeMaster / 60 - 1;	// 1分減算を適用する置換処理を回す
+
+        // ミリ秒カウントダウン
+        float tmp = 0.0f;
+        if(isTimeCountB == 0 && isTimeMaster > 0) tmp = (isTimeMaster - (60 + (60 * (isTimeCountA)))) * 1000;	// 秒数が0かつまだ時間が残っている場合毎フレームごとに60秒+αで小数点以下を切り捨て
+        else tmp = (isTimeMaster - (isTimeCountB + (60 * (isTimeCountA)))) * 1000;								// 秒数が0でないとき毎フレームごとに残り時間で小数点以下を切り捨て
+        isTimeCountC = Mathf.FloorToInt(tmp);																	// 小数点以下を切り捨て
+        if(isTimeCountC <= 0) isTimeCountC = 0;																	// マイナスカウントは避けたいので小数点以下が0以下のときは強制的に0で上書き表示する
+
+        // 最後にstringにキャストしtextに代入
+        Text.text = (isTimeCountA).ToString("00") + ":" + (isTimeCountB).ToString("00") + "." + (isTimeCountC).ToString("000");
     }
 
     [PunRPC]
