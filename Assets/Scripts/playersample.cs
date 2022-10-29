@@ -52,20 +52,16 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
-        if(Input.GetKeyDown(KeyCode.Escape)){
-            #if UNITY_EDITOR
-            EditorApplication.isPlaying = false;
-            //ビルドの場合
-            #else
-                Application.Quit();//ゲームプレイ終了
-            //なんかあったとき
-            #endif
-        }
 		Character_Spawn();
+        //ゲーム中かどうか
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
         Player_Win();//プレイヤーが勝つための関数
     }
     
     void Character_Spawn(){
+        Debug.Log("PLAYER"+RandomMatchMaker.GameStartFlg);
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }

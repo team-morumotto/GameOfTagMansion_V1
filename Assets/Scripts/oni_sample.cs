@@ -42,7 +42,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
-        catch_text = GameObject.Find("/Canvas").transform.Find("logtext").gameObject.GetComponent<Text>();
+        catch_text = GameObject.Find("/Canvas").transform.Find("logText").gameObject.GetComponent<Text>();
         SpawnPoint[0] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint").gameObject;
         SpawnPoint[1] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_01").gameObject;
         SpawnPoint[2] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_02").gameObject;
@@ -54,11 +54,12 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
+        Character_Spawn();
         //ゲーム中かどうか
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
-        Character_Spawn();
+
         Timen -= Time.deltaTime;                           //鬼の残り時間
         Text.text= Mathf.Floor(Timen).ToString();          //stringにキャストしtextに代入
         if(Timen <= 0 && PhotonNetwork.PlayerList.Length > 1){
@@ -71,6 +72,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         }
     }
     void Character_Spawn(){
+        Debug.Log("ONI"+RandomMatchMaker.GameStartFlg);
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
@@ -110,7 +112,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         }
 
         var p = col.gameObject.GetComponent<PhotonView>().Owner.NickName;
-        photonView.RPC(nameof(RpcSendMessage), RpcTarget.All, p);
+        RpcSendMessage(p);
 
     }
 
@@ -129,6 +131,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(time);
         catch_text.enabled = false;
     }
+
     void FixedUpdate(){
         if(!photonView.IsMine){
             return;

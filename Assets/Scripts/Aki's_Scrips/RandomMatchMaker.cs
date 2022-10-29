@@ -47,7 +47,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 	//Photonマスターサーバー接続
     void Connect() {
         Debug.Log(true);
-        if(Input.GetKey(KeyCode.LeftControl)){
+        if(Input.GetKey(KeyCode.LeftControl)){//レフトコントロールを推していたらデバッグモード
             DebugMode = true;
             Debug.Log("デバッグモード");
         }
@@ -78,7 +78,6 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message) {
         // ランダムで参加できるルームが存在しないなら、新規でルームを作成する
         RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
-        roomOptions.IsVisible = false;
         roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
         PhotonNetwork.CreateRoom(null,roomOptions);     //ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
@@ -94,7 +93,6 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         }
         else{
             RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
-            roomOptions.IsVisible = false;
             roomOptions.MaxPlayers = 4;						//ルーム接続の最大人数
 
             PhotonNetwork.CreateRoom(null, roomOptions);	//ルームを作成
