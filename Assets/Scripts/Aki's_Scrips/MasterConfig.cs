@@ -20,8 +20,13 @@ namespace MasterConfig{
         //残り人数生やす用
         public Text peopletext;
         private bool Maxpeople = false;
+
+        void Start() {
+            Application.targetFrameRate = 60; //60FPSに固定する
+        }
         
         void Update(){
+            Application.targetFrameRate = 60; //60FPSに固定する
             if(!photonView.IsMine){
                 return;
             }
