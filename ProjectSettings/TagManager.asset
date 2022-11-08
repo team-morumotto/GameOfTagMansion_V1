@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - Nigeru
   - Oni
+  - PlayerInputManager
   layers:
   - Default
   - TransparentFX

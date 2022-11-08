@@ -36,6 +36,8 @@ public class playersample : MonoBehaviourPunCallbacks
     private int isTimeCountB = 0;		// 時計の分カウント
     private int isTimeCountC = 0;		// 時計のミリ秒カウント(1000ms基準)
     //#### ここまで変数置き場 ####//
+
+    public int ACTOR;
     void Start () {
         // カウント系の処理
         isExitCountMax = 10;								                // Exitカウントの最大秒数
@@ -83,6 +85,7 @@ public class playersample : MonoBehaviourPunCallbacks
         SpawnFlg = false;//以下の関数内の処理を一回だけ行うための処理
 
         var actor = photonView.Owner.ActorNumber;//ルームに入ってきたプレイヤーの入室順番号を入手
+        ACTOR=actor;
         switch(actor){//各プレイヤーの入室順番号によってスポーンポイントを変更
             case 1:
             transform.position = SpawnPoint[0].transform.position;
