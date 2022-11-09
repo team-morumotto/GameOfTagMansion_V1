@@ -850,63 +850,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 1.5
   m_ShadowAngle: 0
---- !u!1001 &285775006
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_RootOrder
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -31.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.037019804
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -197.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1457353874397737863, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2265978067685239101, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
-      propertyPath: m_Name
-      value: Mansion_3.0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ccc3284e528960b418b8b6664734ac61, type: 3}
 --- !u!1001 &290200561
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1680,7 +1623,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7885046681910166447, guid: b56e87f4048bbd84e90f6d89332a83ba, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7885046681910166447, guid: b56e87f4048bbd84e90f6d89332a83ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2232,7 +2175,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8819206963417432426, guid: 7cf1c8a7d874891418853db468ffb073, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8819206963417432426, guid: 7cf1c8a7d874891418853db468ffb073, type: 3}
       propertyPath: m_LocalPosition.x

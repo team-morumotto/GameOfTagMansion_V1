@@ -54,10 +54,10 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
         catch_text = GameObject.Find("/Canvas").transform.Find("logText").gameObject.GetComponent<Text>();
-        SpawnPoint[0] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint").gameObject;
-        SpawnPoint[1] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_01").gameObject;
-        SpawnPoint[2] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_02").gameObject;
-        SpawnPoint[3] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_03").gameObject;
+        SpawnPoint[0] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint").gameObject;
+        SpawnPoint[1] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_01").gameObject;
+        SpawnPoint[2] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_02").gameObject;
+        SpawnPoint[3] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_03").gameObject;
         audioSource = GetComponent<AudioSource>(); //SE鳴らすために取得
     }
 

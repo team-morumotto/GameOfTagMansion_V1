@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2022145393570257349}
   - component: {fileID: 1104979058}
   - component: {fileID: 6623299758057180527}
-  - component: {fileID: 9122978264798481111}
   m_Layer: 0
   m_Name: CinemaChineManager
   m_TagString: MainCameraManager
@@ -103,7 +102,7 @@ MonoBehaviour:
     m_MaxSpeed: 700
     m_AccelTime: 0.1
     m_DecelTime: 0.1
-    m_InputAxisName: Mouse X
+    m_InputAxisName: XBoxRightStick
     m_InputAxisValue: 0
     m_InvertInput: 0
     m_MinValue: -180
@@ -169,22 +168,6 @@ MonoBehaviour:
   m_Damping: 2.71
   m_DampingWhenOccluded: 2.23
   m_OptimalTargetDistance: 0
---- !u!114 &9122978264798481111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2355716685550172257}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb7194dc27b9df64c8beca7482ee8e0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerIndex: -1
-  AutoEnableInputs: 1
-  XYAxis: {fileID: 2498875353512283491, guid: 8800f64be8c709c428d013328931cd71, type: 3}
-  ZAxis: {fileID: 0}
 --- !u!1 &7066885293292988028
 GameObject:
   m_ObjectHideFlags: 0
