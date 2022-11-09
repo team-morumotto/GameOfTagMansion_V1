@@ -38,7 +38,6 @@ public class playersample : MonoBehaviourPunCallbacks
     private int isTimeCountC = 0;		// 時計のミリ秒カウント(1000ms基準)
     //#### ここまで変数置き場 ####//
 
-    public int ACTOR;
     void Start () {
         // カウント系の処理
         isExitCountMax = 10;								                // Exitカウントの最大秒数
@@ -53,10 +52,10 @@ public class playersample : MonoBehaviourPunCallbacks
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
-        SpawnPoint[0] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint").gameObject;
-        SpawnPoint[1] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_01").gameObject;
-        SpawnPoint[2] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_02").gameObject;
-        SpawnPoint[3] = GameObject.Find("/stage2.1").transform.Find("SpawnPoint_03").gameObject;
+        SpawnPoint[0] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint").gameObject;
+        SpawnPoint[1] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_01").gameObject;
+        SpawnPoint[2] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_02").gameObject;
+        SpawnPoint[3] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_03").gameObject;
     }
 
     void Update () {
@@ -79,6 +78,7 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
+        Debug.Log(SpawnFlg);
         photonView.RPC(nameof(Game_Now_Update),RpcTarget.All);
         if(!SpawnFlg){
             return;
@@ -86,7 +86,6 @@ public class playersample : MonoBehaviourPunCallbacks
         SpawnFlg = false;//以下の関数内の処理を一回だけ行うための処理
 
         var actor = photonView.Owner.ActorNumber;//ルームに入ってきたプレイヤーの入室順番号を入手
-        ACTOR=actor;
         switch(actor){//各プレイヤーの入室順番号によってスポーンポイントを変更
             case 1:
             transform.position = SpawnPoint[0].transform.position;

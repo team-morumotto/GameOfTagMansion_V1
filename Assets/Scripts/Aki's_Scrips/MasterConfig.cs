@@ -36,7 +36,7 @@ public class MasterConfig : MonoBehaviourPunCallbacks {
     //残り人数の反映
     [PunRPC]
     private void Numberofpeopleleft(){
-        if(PhotonNetwork.PlayerList.Length == 1){
+        if(PhotonNetwork.PlayerList.Length == 2){
             Maxpeople = true;
         }
         if(Maxpeople){
