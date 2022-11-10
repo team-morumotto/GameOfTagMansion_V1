@@ -22,6 +22,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private Animator anim;
     private AnimatorStateInfo currentBaseState;
     private Rigidbody rb;
+    [SerializeField] ParticleSystem ps; // パーティクルシステムを取得
     public float speed = 6.25f;//鬼の移動速度
     public static string RoomTest = "Room";
     public float animSpeed = 1.5f;
@@ -38,6 +39,8 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private int isTimeCountA = 0;		// 時計の秒カウント
     private int isTimeCountB = 0;		// 時計の分カウント
     private int isTimeCountC = 0;		// 時計のミリ秒カウント(1000ms基準)
+    private bool isSpeedUpStart = false;// スピードアップ開始フラグ
+    
     //#### ここまで変数置き場 ####//
     void Start(){
         // カウント系の処理
@@ -162,9 +165,21 @@ public class oni_sample : MonoBehaviourPunCallbacks
 
         //時間が15秒以下の時に速度を上げる
         float nowspeed;
-        if(isTimeMaster < 15f){
+        //初回
+        if(isTimeMaster < 15f&&isSpeedUpStart == false){
             nowspeed = speed * 2;
+            ps = GameObject.Find("Particle System").GetComponent<ParticleSystem>();
+            ps.transform.localPosition = this.transform.position;
+            ps.Play(); //パーティクルシステムをスタート
+            isSpeedUpStart = true;
         }
+        //初回以外
+        else if(isSpeedUpStart == true){
+            nowspeed = speed * 2;
+            ps.transform.localPosition = this.transform.position;
+            ps.transform.localRotation = this.transform.localRotation;
+        }
+        //通常の場合
         else{
             nowspeed = speed;
         }

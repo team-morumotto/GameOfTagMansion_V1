@@ -11701,6 +11701,7 @@ MonoBehaviour:
   SE:
   - {fileID: 8300000, guid: dd60c8a28a7258f46bb9bc2b9ca4359e, type: 3}
   audioSource: {fileID: 0}
+  ps: {fileID: 3208950973572355511, guid: de2c48cf1b1ea48448647f5f6d754073, type: 3}
   speed: 5
   animSpeed: 1.5
 --- !u!82 &8409879509656933101
