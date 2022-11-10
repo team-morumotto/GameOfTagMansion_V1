@@ -2210,7 +2210,6 @@ MonoBehaviour:
   camera: {fileID: 0}
   animSpeed: 1
   Nokori_Player: 3
-  ACTOR: 0
 --- !u!1 &4401540459609418853
 GameObject:
   m_ObjectHideFlags: 0
