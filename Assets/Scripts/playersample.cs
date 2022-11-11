@@ -78,7 +78,6 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
-        Debug.Log(SpawnFlg);
         photonView.RPC(nameof(Game_Now_Update),RpcTarget.All);
         if(!SpawnFlg){
             return;
