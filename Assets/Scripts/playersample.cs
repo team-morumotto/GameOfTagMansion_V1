@@ -48,11 +48,12 @@ public class playersample : MonoBehaviourPunCallbacks
 
         anim = GetComponent<Animator> ();
         rb = GetComponent<Rigidbody>();
+        //-----------------CinemaChineManagerオブジェクトを取得--------------------//
         GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
-        CameraFreeLook = CameraObj.GetComponent<Cinemachine.CinemachineFreeLook>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
-        CameraCollider = CameraObj.GetComponent<Cinemachine.CinemachineCollider>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
+
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
+
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
         SpawnPoint[0] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint").gameObject;
         SpawnPoint[1] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_01").gameObject;
@@ -61,7 +62,6 @@ public class playersample : MonoBehaviourPunCallbacks
     }
 
     void Update () {
-
         if(!photonView.IsMine){
             return;
         }

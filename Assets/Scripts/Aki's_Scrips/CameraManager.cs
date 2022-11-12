@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    void OnTrigerEnter(Collider c)
+    void OnTriggerEnter(Collider c)
     {
-        if(c.gameObject.tag == "WALL")
+        if(c.gameObject.tag == "Wall")
         {
             Debug.Log("WALLEnter");
         }
     }
 
-    void OnTrigerExit(Collider c)
+    void OnTriggerStay(Collider c)
     {
-        if(c.gameObject.tag == "WALL")
+        if(c.gameObject.tag == "Wall")
+        {
+            Debug.Log("WALLStay");
+        }
+    }
+
+    void OnTriggerExit(Collider c)
+    {
+        if(c.gameObject.tag == "Wall")
         {
             Debug.Log("WALLExit");
         }

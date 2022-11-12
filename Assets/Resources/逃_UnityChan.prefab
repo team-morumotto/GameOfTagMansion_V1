@@ -3638,7 +3638,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  camera: {fileID: 0}
+  CameraFreeLook: {fileID: 0}
+  CameraCollider: {fileID: 0}
   animSpeed: 1
   Nokori_Player: 3
 --- !u!1 &4056523175180540241
