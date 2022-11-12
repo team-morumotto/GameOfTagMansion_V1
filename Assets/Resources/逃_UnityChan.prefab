@@ -3313,6 +3313,7 @@ Transform:
   - {fileID: 6951019121293895210}
   - {fileID: 6243417914002466187}
   - {fileID: 301821292010311374}
+  - {fileID: 8179242313304045502}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3640,7 +3641,6 @@ MonoBehaviour:
   camera: {fileID: 0}
   animSpeed: 1
   Nokori_Player: 3
-  ACTOR: 0
 --- !u!1 &4056523175180540241
 GameObject:
   m_ObjectHideFlags: 0
@@ -5749,6 +5749,37 @@ MonoBehaviour:
   - {fileID: 4372743652845864370}
   debug: 1
   threshold: 0.01
+--- !u!1 &6227234877548175407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8179242313304045502}
+  m_Layer: 0
+  m_Name: LookAtObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8179242313304045502
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6227234877548175407}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3413103105263036145}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6306900205492953778
 GameObject:
   m_ObjectHideFlags: 0
@@ -7071,8 +7102,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c0de4da39c7496e47ad59a9d3ce84906, type: 2}
-  m_sharedMaterial: {fileID: 4774668837378472299, guid: c0de4da39c7496e47ad59a9d3ce84906, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
