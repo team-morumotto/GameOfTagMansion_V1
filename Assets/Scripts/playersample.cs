@@ -15,7 +15,8 @@ public class playersample : MonoBehaviourPunCallbacks
     private Text result_text; //リザルトテキスト
     private GameObject Panels;
     public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
-    public CinemachineFreeLook camera;
+    public CinemachineFreeLook CameraFreeLook; //カメラのFreeLook
+    public CinemachineCollider CameraCollider; //カメラのFreeLook
 
     //## Character系の変数 ##//
     private Rigidbody rb;
@@ -48,7 +49,8 @@ public class playersample : MonoBehaviourPunCallbacks
         anim = GetComponent<Animator> ();
         rb = GetComponent<Rigidbody>();
         GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
-        camera = CameraObj.GetComponent<Cinemachine.CinemachineFreeLook>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
+        CameraFreeLook = CameraObj.GetComponent<Cinemachine.CinemachineFreeLook>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
+        CameraCollider = CameraObj.GetComponent<Cinemachine.CinemachineCollider>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
@@ -62,6 +64,10 @@ public class playersample : MonoBehaviourPunCallbacks
 
         if(!photonView.IsMine){
             return;
+        }
+        if(Input.GetKeyDown(KeyCode.O)){
+            CameraFreeLook.m_Orbits[1].m_Radius = 1.0f;
+            CameraCollider.m_DistanceLimit = 1.0f;
         }
 		Character_Spawn();
         //ゲーム中かどうか
@@ -133,7 +139,7 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
-        PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
+        
         inputHorizontal = Input.GetAxisRaw("Horizontal");    //横方向の値を入力
         inputVertical = Input.GetAxisRaw("Vertical");        //縦方向の値を入力
         if(inputHorizontal==0 && inputVertical==0){
