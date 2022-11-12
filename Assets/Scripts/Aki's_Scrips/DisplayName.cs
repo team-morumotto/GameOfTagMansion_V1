@@ -25,14 +25,15 @@ using Photon.Realtime;
 public class DisplayName : MonoBehaviourPunCallbacks {
     [SerializeField]
     public TextMeshProUGUI NickName;
-    private Vector3 offset = new Vector3(0, 1.5f, 1.5f);
-
     void Start() {
+        if(!photonView.IsMine) {
+            return;
+        }
         NickName = GetComponentInChildren<TextMeshProUGUI>();
+        NickName.text = $"{"Player"}({photonView.OwnerActorNr})";//PhotonNetwork.LocalPlayer.NickNameを自分のオブジェクトの子になっているtextMeshオブジェクトに入れる;
     }
 
     void Update() {
-        NickName.text = photonView.Owner.NickName;//PhotonNetwork.LocalPlayer.NickNameを自分のオブジェクトノコになっているtextMeshオブジェクトに入れる;
         GetComponent<RectTransform>().transform.LookAt(Camera.main.transform);//誰から見ても常に自分の名前が正面に見えるようにする
     }
 }

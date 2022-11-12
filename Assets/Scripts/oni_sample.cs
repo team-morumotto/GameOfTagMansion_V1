@@ -148,7 +148,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
-        PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
+        
         inputHorizontal = Input.GetAxis ("Horizontal");			// 入力デバイスの水平軸をhで定義
         inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
         if(inputHorizontal==0 && inputVertical==0){
