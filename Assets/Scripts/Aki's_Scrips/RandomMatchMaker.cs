@@ -35,7 +35,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     void Update() {
         //SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
-        if(SetName.onEndEditFLG && ConnectFlg) {
+        if(GoToChooseChara.onEndEditFLG && ConnectFlg) {
             Connect();
             ConnectFlg = false;
         }
@@ -77,7 +77,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message) {
         // ランダムで参加できるルームが存在しないなら、新規でルームを作成する
         RoomOptions roomOptions = new RoomOptions();	         //ルームをインスタンス化
-        roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)
+        roomOptions.MaxPlayers = 1;//ルームの最大人数を設定(intをbyteにキャスト)
         PhotonNetwork.CreateRoom(null,roomOptions);              //ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
 
@@ -86,13 +86,13 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         if(DebugMode){
             RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
             roomOptions.IsVisible = false;
-            roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)
+            roomOptions.MaxPlayers = 1;//ルームの最大人数を設定(intをbyteにキャスト)
 
             PhotonNetwork.CreateRoom(oni_sample.RoomTest , roomOptions);	//ルームを作成
         }
         else{
             RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
-            roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)						//ルーム接続の最大人数
+            roomOptions.MaxPlayers = 1;//ルームの最大人数を設定(intをbyteにキャスト)						//ルーム接続の最大人数
 
             PhotonNetwork.CreateRoom(null, roomOptions);	//ルームを作成
         }
@@ -100,16 +100,18 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
 	//ルームに参加した時
     public override void OnJoinedRoom() {
-        GameObject mainCamera = GameObject.FindWithTag("MainCamera");						//シーン上のメインカメラを取得
+        Transform mainCamera = GameObject.FindWithTag("MainCamera").transform.Find("m_start").transform;						//シーン上のメインカメラを取得
         GameObject CinemachineManager = GameObject.FindWithTag("MainCameraManager");		//シーン上のメインカメラマネージャーを取得
         CinemachineManager.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;	//メインカメラマネージャーのCinemachineFreeLookを有効にする
-        CinemachineManager.GetComponent<Cinemachine.CinemachineCollider>().enabled = true;	//メインカメラマネージャーのCinemachineColliderを有効にする
         CinemachineFreeLook camera = CinemachineManager.GetComponent<CinemachineFreeLook>();//CinemachineFreeLookコンポーネントを取得
         switch(Number) {
             case 0:
                 GameObject Player = PhotonNetwork.Instantiate(PlayerObject[GoToChooseChara.Characters].name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Playerオブジェクトを生成
-                camera.Follow = Player.transform; //CinemachineFreeLookコンポーネント内のFollowにOniオブジェクトのtransformを設定
-                camera.LookAt = Player.transform; //CinemachineFreeLookコンポーネント内のLookAtにOniオブジェクトのtransformを設定
+                camera.Follow = Player.transform; //CinemachineFreeLookコンポーネント内のFollowにPlayerオブジェクトを設定
+                camera.LookAt = Player.transform.Find("LookAtObject").gameObject.transform; //CinemachineFreeLookコンポーネント内のLookAtにPlayerオブジェクトのLookAtObjectのtransformを設定
+                PivotColliderController.m_start = mainCamera.transform;//MainCameraManagerのtransformをPivotStartに代入
+                PivotColliderController.m_end = Player.transform;//Player(自分)のtransformをPivotEndに代入
+                PivotColliderController.PlayerObj = Player;//Player(自分)のオブジェクトをPlayerObjに代入
                 break;
             case 1:
                 GameObject Oni = PhotonNetwork.Instantiate(OniObject[GoToChooseChara.Characters].name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成

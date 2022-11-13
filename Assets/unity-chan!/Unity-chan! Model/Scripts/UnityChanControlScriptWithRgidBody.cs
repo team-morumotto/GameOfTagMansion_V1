@@ -80,7 +80,7 @@ namespace UnityChan
 			if(!photonView.IsMine){
 				return;
 			}
-				PhotonNetwork.LocalPlayer.NickName = SetName.NAME;   // 名前をセット(名前入力後にオブジェクト生成のため)
+				
 				float h = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義
 				float v = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
 				anim.SetFloat ("Speed", v);							// Animator側で設定している"Speed"パラメタにvを渡す

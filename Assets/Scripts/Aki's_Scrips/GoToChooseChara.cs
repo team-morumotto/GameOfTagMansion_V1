@@ -8,6 +8,7 @@ public class GoToChooseChara : MonoBehaviour {
     public static int PlayMode = 1;
     public static int Characters = 0;
     private int choose = 0;
+    public static bool onEndEditFLG;
     public GameObject BackObject = null;
     public GameObject NextObject = null;
 
@@ -25,6 +26,7 @@ public class GoToChooseChara : MonoBehaviour {
     }
     public void isChooseCharacter(int choose) {
         Characters = choose;
+        onEndEditFLG = true;//名前入力が行われたらRandomMatchMakerスクリプトのConnect関数を実行するためのフラグ
         SceneManager.LoadScene("GameScene",LoadSceneMode.Single);
     }
 }
