@@ -100,7 +100,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
 	//ルームに参加した時
     public override void OnJoinedRoom() {
-        Transform mainCamera = GameObject.FindWithTag("MainCamera").transform.Find("m_start").transform;						//シーン上のメインカメラを取得
+        Transform mainCamera = GameObject.FindWithTag("MainCamera").transform.Find("CameraCollider").transform;						//シーン上のメインカメラを取得
         GameObject CinemachineManager = GameObject.FindWithTag("MainCameraManager");		//シーン上のメインカメラマネージャーを取得
         CinemachineManager.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;	//メインカメラマネージャーのCinemachineFreeLookを有効にする
         CinemachineFreeLook camera = CinemachineManager.GetComponent<CinemachineFreeLook>();//CinemachineFreeLookコンポーネントを取得
@@ -109,7 +109,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
                 GameObject Player = PhotonNetwork.Instantiate(PlayerObject[GoToChooseChara.Characters].name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Playerオブジェクトを生成
                 camera.Follow = Player.transform; //CinemachineFreeLookコンポーネント内のFollowにPlayerオブジェクトを設定
                 camera.LookAt = Player.transform.Find("LookAtObject").gameObject.transform; //CinemachineFreeLookコンポーネント内のLookAtにPlayerオブジェクトのLookAtObjectのtransformを設定
-                PivotColliderController.m_start = mainCamera.transform;//MainCameraManagerのtransformをPivotStartに代入
+                PivotColliderController.m_start = CinemachineManager.transform;//MainCameraManagerのtransformをPivotStartに代入
                 PivotColliderController.m_end = Player.transform;//Player(自分)のtransformをPivotEndに代入
                 PivotColliderController.PlayerObj = Player;//Player(自分)のオブジェクトをPlayerObjに代入
                 break;

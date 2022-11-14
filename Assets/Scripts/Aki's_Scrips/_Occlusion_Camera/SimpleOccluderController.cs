@@ -10,7 +10,7 @@ using UnityEngine;
 public class SimpleOccluderController : MonoBehaviour
 {
     /// <summary>（半）透明状態にする時にどれくらいの alpha にするか指定する</summary>
-    [SerializeField, Range(0f, 1f)] float m_transparency = 0.2f;
+    [SerializeField, Range(0f, 1f)] float m_transparency = 0.8f;
     /// <summary>（半）透明状態から戻る時にどれくらいの alpha にするか指定する</summary>
     [SerializeField, Range(0f, 1f)] float m_opaque = 1f;
 
