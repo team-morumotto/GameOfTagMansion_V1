@@ -2184,6 +2184,9 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 2
     Name: GravityControl
+  - Type: 1
+    SynchronizeType: 0
+    Name: AnimSpeed
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
@@ -2208,9 +2211,16 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  camera: {fileID: 0}
+  ItamSpawnPoint:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  CameraFreeLook: {fileID: 0}
+  CameraCollider: {fileID: 0}
   animSpeed: 1
   Nokori_Player: 3
+  particleSystem: {fileID: 5903031571917218376, guid: 6a996e846c90cf1409094a6cca9f9943, type: 3}
 --- !u!1 &4401540459609418853
 GameObject:
   m_ObjectHideFlags: 0
