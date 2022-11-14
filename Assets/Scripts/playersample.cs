@@ -22,10 +22,11 @@ public class playersample : MonoBehaviourPunCallbacks
     private Rigidbody rb;
     private Animator anim;
     private AnimatorStateInfo currentBaseState;
-    public float animSpeed = 1.5f;
+    public float animSpeed = 5f;
     float inputHorizontal;
     float inputVertical;
-    private float moveSpeed = 5.0f;
+    private float SpeedUpTime;//アイテム取得時のスピードアップ時間
+    public static float moveSpeed = 5.0f;
 
     //## ワールド等外部的変数 ##//
 	bool SpawnFlg = true;
@@ -143,8 +144,14 @@ public class playersample : MonoBehaviourPunCallbacks
         inputHorizontal = Input.GetAxisRaw("Horizontal");    //横方向の値を入力
         inputVertical = Input.GetAxisRaw("Vertical");        //縦方向の値を入力
         if(inputHorizontal==0 && inputVertical==0){
-            anim.SetFloat ("Speed", 0);                      //プレイヤーが移動してないときは走るアニメーションを止める
+            anim.SetFloat ("Speed", 0f);                      //プレイヤーが移動してないときは走るアニメーションを止める
         }else{
+            if(moveSpeed == 10.0f){
+                SpeedUp();//スピードアップの時間を計測し、一定時間を超えたらスピードを戻す.
+                anim.SetFloat("AnimSpeed", 1.5f);
+            }else{
+                anim.SetFloat("AnimSpeed", 1.0f);
+            }
             anim.SetFloat ("Speed", 1f);                     //プレイヤーが移動しているときは走るアニメーションを再生する
         }
 
@@ -180,6 +187,14 @@ public class playersample : MonoBehaviourPunCallbacks
             Application.Quit();//ゲームプレイ終了
         //なんかあったとき
         #endif
+    }
+
+    void SpeedUp(){
+        SpeedUpTime += Time.deltaTime;
+        if(SpeedUpTime >= 5.0f){
+            moveSpeed = 5.0f;
+            SpeedUpTime = 0.0f;
+        }
     }
 
     // 暫定処理として、10秒経過後に強制的にプログラムを終了する

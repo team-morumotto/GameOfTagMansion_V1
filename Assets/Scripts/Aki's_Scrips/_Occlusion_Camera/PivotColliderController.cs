@@ -32,7 +32,7 @@ public class PivotColliderController : MonoBehaviour
     {
         if (m_start && m_end)
         {
-            transform.LookAt(PlayerObj.transform);//Boxコライダーに常にプレイヤーの方を向かせる
+            transform.LookAt(PlayerObj.transform.position+new Vector3(0.0f,1.5f,0.0f));//Boxコライダーに常にプレイヤーの方を向かせる
             float distance = Vector3.Distance(m_start.position, m_end.position);//始端と終端の距離を求める
             col.size = new Vector3(col.size.x, col.size.y, distance);//コライダーのサイズを変更する
         }
