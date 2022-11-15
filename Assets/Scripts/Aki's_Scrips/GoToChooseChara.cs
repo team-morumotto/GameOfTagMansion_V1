@@ -18,7 +18,8 @@ public class GoToChooseChara : MonoBehaviour {
     }
     public void isChoosePlayMode(int choose) {
         PlayMode = choose;
-        NextObject.SetActive(true);
+        //ボタンで移動させないと初期ボタンの指定ができないので一旦無効化
+        //NextObject.SetActive(true);
     }
     public void isBackCharaToPlayMode() {
         NextObject.SetActive(false);

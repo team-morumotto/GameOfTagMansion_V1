@@ -15,6 +15,7 @@ public class playersample : MonoBehaviourPunCallbacks
     private Text result_text; //リザルトテキスト
     private GameObject Panels;
     public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
+    public GameObject[] ItamSpawnPoint;//アイテムのステージスポーンポイント
     public CinemachineFreeLook CameraFreeLook; //カメラのFreeLook
     public CinemachineCollider CameraCollider; //カメラのFreeLook
 
@@ -31,6 +32,7 @@ public class playersample : MonoBehaviourPunCallbacks
     //## ワールド等外部的変数 ##//
 	bool SpawnFlg = true;
     public int Nokori_Player=3;
+    private float ItemSpawnTime;
     private int isExitCountMax = 10;	// Exitカウントの待機秒数
     private int isExitCountA = 0;		// Exitカウントの秒
     private int isExitCountB = 0;		// Exitカウントのミリ秒(60ms基準)
@@ -38,6 +40,8 @@ public class playersample : MonoBehaviourPunCallbacks
     private int isTimeCountA = 0;		// 時計の秒カウント
     private int isTimeCountB = 0;		// 時計の分カウント
     private int isTimeCountC = 0;		// 時計のミリ秒カウント(1000ms基準)
+    [SerializeField] ParticleSystem particleSystem; // パーティクルシステムを取得
+
     //#### ここまで変数置き場 ####//
 
     void Start () {
@@ -51,6 +55,7 @@ public class playersample : MonoBehaviourPunCallbacks
         rb = GetComponent<Rigidbody>();
         //-----------------CinemaChineManagerオブジェクトを取得--------------------//
         GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
+        GameObject mainCamera = GameObject.FindWithTag("MainCamera");
 
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
@@ -60,15 +65,23 @@ public class playersample : MonoBehaviourPunCallbacks
         SpawnPoint[1] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_01").gameObject;
         SpawnPoint[2] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_02").gameObject;
         SpawnPoint[3] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_03").gameObject;
+
+        ItamSpawnPoint[0] = GameObject.Find("/Mansion_3.0").transform.Find("ItemSpawnPoint").gameObject;
+        ItamSpawnPoint[1] = GameObject.Find("/Mansion_3.0").transform.Find("ItemSpawnPoint_01").gameObject;
+        ItamSpawnPoint[2] = GameObject.Find("/Mansion_3.0").transform.Find("ItemSpawnPoint_02").gameObject;
+        ItamSpawnPoint[3] = GameObject.Find("/Mansion_3.0").transform.Find("ItemSpawnPoint_03").gameObject;
+
+        particleSystem = mainCamera.transform.Find("Particle System").gameObject.GetComponent<ParticleSystem>();
     }
 
     void Update () {
         if(!photonView.IsMine){
             return;
         }
-        if(Input.GetKeyDown(KeyCode.O)){
-            CameraFreeLook.m_Orbits[1].m_Radius = 1.0f;
-            CameraCollider.m_DistanceLimit = 1.0f;
+        ItemSpawnTime += Time.deltaTime;
+        if(ItemSpawnTime >= 10.0f){
+            ItemSpawnTime = 0.0f;
+            ItemSpawn();
         }
 		Character_Spawn();
         //ゲーム中かどうか
@@ -148,8 +161,10 @@ public class playersample : MonoBehaviourPunCallbacks
         }else{
             if(moveSpeed == 10.0f){
                 SpeedUp();//スピードアップの時間を計測し、一定時間を超えたらスピードを戻す.
+                particleSystem.Play(); //パーティクルシステムをスタート
                 anim.SetFloat("AnimSpeed", 1.5f);
             }else{
+                particleSystem.Stop(); //パーティクルシステムをストップ
                 anim.SetFloat("AnimSpeed", 1.0f);
             }
             anim.SetFloat ("Speed", 1f);                     //プレイヤーが移動しているときは走るアニメーションを再生する
@@ -209,6 +224,14 @@ public class playersample : MonoBehaviourPunCallbacks
             isExitCountA = 0;               // カウントをリセット
             PhotonNetwork.LeaveRoom();      // ルームから退出
             GotoTitleScene.exeend();		// プログラムを終了する
+        }
+    }
+
+    void ItemSpawn(){
+        if(PhotonNetwork.LocalPlayer.IsMasterClient){
+            for(int i=0; i<4; i++){
+                PhotonNetwork.Instantiate("Item",ItamSpawnPoint[i].transform.position,Quaternion.identity);
+            }
         }
     }
 
