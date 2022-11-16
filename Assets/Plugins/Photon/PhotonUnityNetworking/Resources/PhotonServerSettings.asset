@@ -59,6 +59,8 @@ MonoBehaviour:
   - Game_Now_Update
   - Nokri_Player
   - Oni_Button_Off
+  - Announse_Lose
+  - Name
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

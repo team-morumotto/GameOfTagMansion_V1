@@ -16,8 +16,5 @@ public class item : MonoBehaviour
             Destroy(gameObject);
             oni_sample.speed = 13.0f;
         }
-        else{
-            Destroy(gameObject);
-        }
     }
 }
