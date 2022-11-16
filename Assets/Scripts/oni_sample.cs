@@ -13,8 +13,8 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private Text result_text; //リザルトテキスト
     public Text catch_text; //捕まったとき用
     public GameObject[] SpawnPoint;//キャラクターのステージスポーンポイント
+    public GameObject[] ItamSpawnPoint;//アイテムのステージスポーンポイント
     private GameObject Panels;
-    public CinemachineFreeLook camera;
     //SE鳴らす用関連
     public AudioClip[] SE;
     public AudioSource audioSource;
@@ -23,13 +23,15 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private AnimatorStateInfo currentBaseState;
     private Rigidbody rb;
     [SerializeField] ParticleSystem ps; // パーティクルシステムを取得
-    public float speed = 6.25f;//鬼の移動速度
+    public static float speed = 6.25f;//鬼の移動速度
     public static string RoomTest = "Room";
     public float animSpeed = 1.5f;
     private float inputHorizontal;
     private float inputVertical;
+    private float SpeedUpTime;//アイテム取得時のスピードアップ時間
     //## ワールド等外部的変数 ##//
     private int SpawnCnt = 0;
+    private float ItemSpawnTime;//アイテムスポーン時間
     private bool playersetflag = false; //人数ifして必要人数になってたらゲームがスタートしたと認識してtrueになる
     bool SpawnFlg = true;
     private int isExitCountMax = 10;	// Exitカウントの待機秒数
@@ -40,6 +42,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
     private int isTimeCountB = 0;		// 時計の分カウント
     private int isTimeCountC = 0;		// 時計のミリ秒カウント(1000ms基準)
     private bool isSpeedUpStart = false;// スピードアップ開始フラグ
+    [SerializeField] ParticleSystem particleSystem; // パーティクルシステムを取得
     
     //#### ここまで変数置き場 ####//
     void Start(){
@@ -52,21 +55,36 @@ public class oni_sample : MonoBehaviourPunCallbacks
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         GameObject CameraObj = GameObject.FindWithTag("MainCameraManager");
-        camera = CameraObj.GetComponent<Cinemachine.CinemachineFreeLook>();//メインカメラマネージャーのCinemachineFreeLookを有効にする
+        GameObject mainCamera = GameObject.FindWithTag("MainCamera");
+
         Panels = GameObject.Find("/Canvas").transform.Find("Result_PanelList").gameObject;
         Text = GameObject.Find("/Canvas").transform.Find("Time").gameObject.GetComponent<Text>();
+
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
         catch_text = GameObject.Find("/Canvas").transform.Find("logText").gameObject.GetComponent<Text>();
+
         SpawnPoint[0] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint").gameObject;
         SpawnPoint[1] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_01").gameObject;
         SpawnPoint[2] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_02").gameObject;
         SpawnPoint[3] = GameObject.Find("/Mansion_3.0").transform.Find("SpawnPoint_03").gameObject;
         audioSource = GetComponent<AudioSource>(); //SE鳴らすために取得
+
+        ItamSpawnPoint[0] = GameObject.Find("/Mansion_3.0").transform.Find("ItemSpawnPoint").gameObject;
+        ItamSpawnPoint[1] = GameObject.Find("/Mansion_3.0").transform.Find("ItemSpawnPoint_01").gameObject;
+        ItamSpawnPoint[2] = GameObject.Find("/Mansion_3.0").transform.Find("ItemSpawnPoint_02").gameObject;
+        ItamSpawnPoint[3] = GameObject.Find("/Mansion_3.0").transform.Find("ItemSpawnPoint_03").gameObject;
+
+        particleSystem = mainCamera.transform.Find("Particle System").gameObject.GetComponent<ParticleSystem>();
     }
 
     void Update(){
         if(!photonView.IsMine){
             return;
+        }
+        ItemSpawnTime += Time.deltaTime;
+        if(ItemSpawnTime >= 10.0f){
+            ItemSpawnTime = 0.0f;
+            ItemSpawn();
         }
         Character_Spawn();
         //ゲーム中かどうか
@@ -152,9 +170,17 @@ public class oni_sample : MonoBehaviourPunCallbacks
         inputHorizontal = Input.GetAxis ("Horizontal");			// 入力デバイスの水平軸をhで定義
         inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
         if(inputHorizontal==0 && inputVertical==0){
-            anim.SetFloat ("Speed", 0);//プレイヤーが移動してないときは走るアニメーションを止める
+            anim.SetFloat ("Speed", 0f);                      //プレイヤーが移動してないときは走るアニメーションを止める
         }else{
-            anim.SetFloat ("Speed", 1);//プレイヤーが移動しているときは走るアニメーションを再生する
+            if(speed > 10.0f){
+                SpeedUp();//スピードアップの時間を計測し、一定時間を超えたらスピードを戻す.
+                particleSystem.Play(); //パーティクルシステムをスタート
+                anim.SetFloat("AnimSpeed", 1.5f);
+            }else{
+                particleSystem.Stop(); //パーティクルシステムをストップ
+                anim.SetFloat("AnimSpeed", 1.0f);
+            }
+            anim.SetFloat ("Speed", 1f);                     //プレイヤーが移動しているときは走るアニメーションを再生する
         }
 
         // カメラの方向から、X-Z平面の単位ベクトルを取得
@@ -170,7 +196,6 @@ public class oni_sample : MonoBehaviourPunCallbacks
             nowspeed = speed * 2;
             ps = GameObject.Find("Particle System").GetComponent<ParticleSystem>();
             ps.transform.localPosition = this.transform.position;
-            ps.Play(); //パーティクルシステムをスタート
             isSpeedUpStart = true;
         }
         //初回以外
@@ -200,6 +225,20 @@ public class oni_sample : MonoBehaviourPunCallbacks
             Application.Quit();//ゲームプレイ終了
         //なんかあったとき
         #endif
+    }
+    void ItemSpawn(){
+        if(PhotonNetwork.LocalPlayer.IsMasterClient){
+            for(int i=0; i<4; i++){
+                PhotonNetwork.Instantiate("Item",ItamSpawnPoint[i].transform.position,Quaternion.identity);
+            }
+        }
+    }
+    void SpeedUp(){
+        SpeedUpTime += Time.deltaTime;
+        if(SpeedUpTime >= 5.0f){
+            speed = 6.25f;
+            SpeedUpTime = 0.0f;
+        }
     }
 
     // 暫定処理として、10秒経過後に強制的にプログラムを終了する

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
-
-public class GoToChooseChara : MonoBehaviour {
+public class GoToChooseChara : MonoBehaviourPunCallbacks {
     public static int PlayMode = 1;
     public static int Characters = 0;
     private int choose = 0;
@@ -29,5 +29,10 @@ public class GoToChooseChara : MonoBehaviour {
         Characters = choose;
         onEndEditFLG = true;//名前入力が行われたらRandomMatchMakerスクリプトのConnect関数を実行するためのフラグ
         SceneManager.LoadScene("GameScene",LoadSceneMode.Single);
+    }
+
+    [PunRPC]
+    void Oni_Button_Off(){
+        GameObject.Find("OniButton").SetActive(false);
     }
 }

@@ -115,8 +115,11 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
                 break;
             case 1:
                 GameObject Oni = PhotonNetwork.Instantiate(OniObject[GoToChooseChara.Characters].name,SpawnPoint[PhotonNetwork.CurrentRoom.PlayerCount-1].transform.position,Quaternion.identity,0);//Oniオブジェクトを生成
-                camera.Follow = Oni.transform; //CinemachineFreeLookコンポーネント内のFollowにOniオブジェクトのtransformを設定
-                camera.LookAt = Oni.transform; //CinemachineFreeLookコンポーネント内のLookAtにOniオブジェクトのtransformを設定
+                camera.Follow = Oni.transform; //CinemachineFreeLookコンポーネント内のFollowにPlayerオブジェクトを設定
+                camera.LookAt = Oni.transform.Find("LookAtObject").gameObject.transform; //CinemachineFreeLookコンポーネント内のLookAtにPlayerオブジェクトのLookAtObjectのtransformを設定
+                PivotColliderController.m_start = CinemachineManager.transform;//MainCameraManagerのtransformをPivotStartに代入
+                PivotColliderController.m_end = Oni.transform;//Player(自分)のtransformをPivotEndに代入
+                PivotColliderController.PlayerObj = Oni;//Player(自分)のオブジェクトをPlayerObjに代入
                 break;
         }
 		//ルームに入室している人数がルームの最大人数になったら
