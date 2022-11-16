@@ -20,6 +20,7 @@ public class MasterConfig : MonoBehaviourPunCallbacks {
     private bool Maxpeople = false;
     public static float GameTimer = 60.0f;             // カウントダウンの時間(ローカル時間が引かれるため可変)
 
+    public static string SpawnWorld = "/Mansion";
     void Start() {
         Application.targetFrameRate = 60; // 60FPSに固定する
     }
