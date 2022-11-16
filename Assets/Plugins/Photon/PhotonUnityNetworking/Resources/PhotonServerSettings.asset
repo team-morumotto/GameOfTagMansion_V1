@@ -58,6 +58,7 @@ MonoBehaviour:
   - KUSO
   - Game_Now_Update
   - Nokri_Player
+  - Oni_Button_Off
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

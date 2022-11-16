@@ -10,11 +10,6 @@ public class gotoPlayerselect : MonoBehaviour
     void Start() {
         PlayerSelectPanel.SetActive(false);
     }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
     public void gotoplayerselect(){
         PlayerSelectPanel.SetActive(true);
         TitleMenuPanel.SetActive(false);
