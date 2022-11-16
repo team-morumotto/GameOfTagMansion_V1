@@ -1,15 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 using UnityEngine.UI;
-using UnityEditor;
-using System;
 
 public class playersample : MonoBehaviourPunCallbacks
 {
-    
     //## Unity オブジェクトリスト ##//
     Text Text;
     private Text result_text; //リザルトテキスト
@@ -41,6 +36,7 @@ public class playersample : MonoBehaviourPunCallbacks
     private int isTimeCountB = 0;		// 時計の分カウント
     private int isTimeCountC = 0;		// 時計のミリ秒カウント(1000ms基準)
     [SerializeField] ParticleSystem particleSystem; // パーティクルシステムを取得
+    public static bool isPlayerLose = false; // ゲーム終了フラグ
 
     //#### ここまで変数置き場 ####//
 
@@ -70,7 +66,6 @@ public class playersample : MonoBehaviourPunCallbacks
         ItamSpawnPoint[1] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("ItemSpawnPoint_01").gameObject;
         ItamSpawnPoint[2] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("ItemSpawnPoint_02").gameObject;
         ItamSpawnPoint[3] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("ItemSpawnPoint_03").gameObject;
-    
 
         particleSystem = mainCamera.transform.Find("Particle System").gameObject.GetComponent<ParticleSystem>();
     }
@@ -79,6 +74,7 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
+        PhotonNetwork.LocalPlayer.NickName = $"{"Player"}({photonView.Owner.ActorNumber})";
         ItemSpawnTime += Time.deltaTime;
         if(ItemSpawnTime >= 10.0f){
             ItemSpawnTime = 0.0f;
@@ -122,6 +118,7 @@ public class playersample : MonoBehaviourPunCallbacks
         }
     }
 
+    //プレイヤーが勝利した場合の処理
     void Player_Win(){
         if(!RandomMatchMaker.GameStartFlg){
             return;
@@ -137,17 +134,24 @@ public class playersample : MonoBehaviourPunCallbacks
             isExit();
         }
     }
-    void Player_Lose(Collision col) {
-        //捕まったとき
-        if(col.gameObject.GetComponent<oni_sample>() == true){  //あたったオブジェクトにOni_Sampleがついているかどうか
-            Text.text = ("00:00.000").ToString();
-            Panels.SetActive(true);                             //パネルを表示
-            result_text.text = "捕まった！！…";
-            PhotonNetwork.Destroy(gameObject);                  //自分を全体から破棄
-            PhotonNetwork.Disconnect();//ルームから退出
-            //Invoke("Out_After_Delay", 3.0f);                    //3秒後にOut_After_Delay関数を呼び出す
-            isExit();
+    void OnCollisionEnter(Collision collision){
+        if(!photonView.IsMine){
+            return;
         }
+        if(collision.gameObject.GetComponent<oni_sample>()){
+            Player_Lose(collision.gameObject);
+        }
+    }
+    //プレイヤーが敗北した場合の処理
+    void Player_Lose(GameObject Enemy) {
+        //捕まったとき
+        Text.text = ("00:00.000").ToString();
+        Panels.SetActive(true);                             //パネルを表示
+        result_text.text = "捕まった！！…";
+        PhotonNetwork.Destroy(gameObject);                  //自分を全体から破棄
+        PhotonNetwork.Disconnect();                         //ルームから退出
+        //Invoke("Out_After_Delay", 3.0f);                  //3秒後にOut_After_Delay関数を呼び出す
+        isExit();
     }
 
     void FixedUpdate(){
@@ -186,12 +190,6 @@ public class playersample : MonoBehaviourPunCallbacks
         if (moveForward != Vector3.zero) {
             transform.rotation = Quaternion.LookRotation(moveForward);
         }
-    }
-    public void OnCollisionEnter(Collision col){
-        if(!photonView.IsMine){
-            return;
-        }
-        Player_Lose(col);//触れた対象のコライダー情報を引数に渡す
     }
 
     void OutAfterDelay(){

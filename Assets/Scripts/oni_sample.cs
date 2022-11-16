@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Cinemachine;
-using System;
 
 public class oni_sample : MonoBehaviourPunCallbacks
 {
@@ -63,7 +61,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         result_text = GameObject.Find("/Canvas").transform.Find("Result_PanelList").transform.Find("Result_TextBox").gameObject.GetComponent<Text>();
         catch_text = GameObject.Find("/Canvas").transform.Find("logText").gameObject.GetComponent<Text>();
 
-        SpawnPoint[0] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("SpawnPoint").gameObject;
+         SpawnPoint[0] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("SpawnPoint").gameObject;
         SpawnPoint[1] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("SpawnPoint_01").gameObject;
         SpawnPoint[2] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("SpawnPoint_02").gameObject;
         SpawnPoint[3] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("SpawnPoint_03").gameObject;
@@ -81,6 +79,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
+        PhotonNetwork.LocalPlayer.NickName = $"{"Player"}({photonView.Owner.ActorNumber})";
         ItemSpawnTime += Time.deltaTime;
         if(ItemSpawnTime >= 10.0f){
             ItemSpawnTime = 0.0f;
@@ -212,6 +211,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         rb.velocity = moveForward * nowspeed + new Vector3(0, rb.velocity.y, 0);
 
         // キャラクターの向きを進行方向に
+
         if (moveForward != Vector3.zero) {
             transform.rotation = Quaternion.LookRotation(moveForward);
         }
@@ -233,12 +233,18 @@ public class oni_sample : MonoBehaviourPunCallbacks
             }
         }
     }
+    //スピードアップの時間を計測し、一定時間を超えたらスピードを戻す.
     void SpeedUp(){
         SpeedUpTime += Time.deltaTime;
         if(SpeedUpTime >= 5.0f){
             speed = 6.25f;
             SpeedUpTime = 0.0f;
         }
+    }
+
+    //プレイヤーを捕まえた時の処理
+    void Player_Catch(GameObject Player){
+        PhotonNetwork.Destroy(Player);
     }
 
     // 暫定処理として、10秒経過後に強制的にプログラムを終了する

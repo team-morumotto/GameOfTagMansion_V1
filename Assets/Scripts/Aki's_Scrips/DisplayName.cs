@@ -15,22 +15,16 @@ https://bibinbaleo.hatenablog.com/entry/2019/09/06/131024
 ##### ｺｺﾏﾃﾞREADME ###*/
 
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
-using Photon.Realtime;
 
 public class DisplayName : MonoBehaviourPunCallbacks {
-    [SerializeField]
-    public TextMeshProUGUI NickName;
-    void Start() {
-        if(!photonView.IsMine) {
-            return;
-        }
+    public static TextMeshProUGUI NickName;
+    string Name;
+    void Start(){
         NickName = GetComponentInChildren<TextMeshProUGUI>();
-        NickName.text = $"{"Player"}({photonView.OwnerActorNr})";//PhotonNetwork.LocalPlayer.NickNameを自分のオブジェクトの子になっているtextMeshオブジェクトに入れる;
+        NickName.text = $"{"Player"}({photonView.OwnerActorNr})";//PhotonNetwork.LocalPlayer.NickNameを自分のオブジェクトの子になっているtextMeshオブジェクトに入れる
     }
 
     void Update() {

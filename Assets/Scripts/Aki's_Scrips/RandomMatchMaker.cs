@@ -11,8 +11,6 @@
     参考サイト==https://enia.hatenablog.com/entry/unity/introduction/20
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
@@ -29,15 +27,15 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public static bool GameStartFlg = false;//ゲーム開始フラグ
     public static bool CharacterSpawnFlg =false;
     public static bool kasu = false;
-
     bool ConnectFlg = true;
     bool DebugMode = false;
+    public static string Name;
 
     void Update() {
         //SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
-        if(GoToChooseChara.onEndEditFLG && ConnectFlg) {
-            Connect();
+        if(GoToChooseChara.OnEndEditFlg && ConnectFlg) {
             ConnectFlg = false;
+            Connect();
         }
         if (PhotonNetwork.CurrentRoom.PlayerCount == 4) {
             photonView.RPC(nameof(sinekasu),RpcTarget.All);
@@ -46,7 +44,6 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
 	//Photonマスターサーバー接続
     void Connect() {
-        Debug.Log(true);
         if(Input.GetKey(KeyCode.LeftControl)){//レフトコントロールを推していたらデバッグモード
             DebugMode = true;
             Debug.Log("デバッグモード");
