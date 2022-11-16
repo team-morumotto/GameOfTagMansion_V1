@@ -1951,7 +1951,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955f385e5c5f6724fb2d373d0d964ea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NickName: {fileID: 0}
 --- !u!1 &1673636152598218345
 GameObject:
   m_ObjectHideFlags: 0
@@ -3662,12 +3661,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  camera: {fileID: 0}
   SE:
   - {fileID: 8300000, guid: dd60c8a28a7258f46bb9bc2b9ca4359e, type: 3}
   audioSource: {fileID: 0}
   ps: {fileID: 0}
-  speed: 5
   animSpeed: 1.5
   particleSystem: {fileID: 5903031571917218376, guid: 6a996e846c90cf1409094a6cca9f9943, type: 3}
 --- !u!82 &1673636152938565025

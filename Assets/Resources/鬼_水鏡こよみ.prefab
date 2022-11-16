@@ -11457,7 +11457,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955f385e5c5f6724fb2d373d0d964ea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NickName: {fileID: 0}
 --- !u!1 &8409879509656933100
 GameObject:
   m_ObjectHideFlags: 0
@@ -11674,7 +11673,7 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: GravityControl
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: AnimSpeed
   m_SynchronizeLayers:
   - SynchronizeType: 0
