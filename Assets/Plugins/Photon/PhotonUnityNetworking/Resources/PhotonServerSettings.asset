@@ -61,6 +61,7 @@ MonoBehaviour:
   - Oni_Button_Off
   - Announse_Lose
   - Name
+  - Catch_RPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

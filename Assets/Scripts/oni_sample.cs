@@ -148,6 +148,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(p == PhotonNetwork.NickName){
             return;
         }
+        photonView.RPC(nameof(Catch_RPC), RpcTarget.All, p,col);
         catch_text.enabled = true;
         catch_text.text = p + "を捕まえた！";
         audioSource.PlayOneShot(SE[0]);
@@ -159,6 +160,16 @@ public class oni_sample : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(time);
         catch_text.enabled = false;
+    }
+
+    [PunRPC]
+    void Catch_RPC(string p,GameObject g){
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
+        if(p==PhotonNetwork.NickName){
+            g.GetComponent<playersample>().Player_Lose();
+        }
     }
 
     void FixedUpdate(){

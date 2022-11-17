@@ -139,11 +139,11 @@ public class playersample : MonoBehaviourPunCallbacks
             return;
         }
         if(collision.gameObject.GetComponent<oni_sample>()){
-            Player_Lose(collision.gameObject);
+            Player_Lose();
         }
     }
     //プレイヤーが敗北した場合の処理
-    void Player_Lose(GameObject Enemy) {
+    public void Player_Lose() {
         //捕まったとき
         Text.text = ("00:00.000").ToString();
         Panels.SetActive(true);                             //パネルを表示
