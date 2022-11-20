@@ -11475,6 +11475,7 @@ GameObject:
   - component: {fileID: 8409879509656933099}
   - component: {fileID: 8409879509656933098}
   - component: {fileID: 8409879509656933101}
+  - component: {fileID: 318967550957841998}
   m_Layer: 0
   m_Name: "\u9B3C_\u6C34\u93E1\u3053\u3088\u307F"
   m_TagString: Oni
@@ -11807,6 +11808,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &318967550957841998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8409879509656933100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f8727b929294b448afaa61c5bcf72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8409879509657361629
 GameObject:
   m_ObjectHideFlags: 0

@@ -3286,6 +3286,7 @@ GameObject:
   - component: {fileID: 7836751523513362921}
   - component: {fileID: 7440309254818989140}
   - component: {fileID: 2987805111990171789}
+  - component: {fileID: -4583430984408040784}
   m_Layer: 0
   m_Name: "\u9003_UnityChan"
   m_TagString: Nigeru
@@ -3647,6 +3648,18 @@ MonoBehaviour:
   animSpeed: 1
   Nokori_Player: 3
   particleSystem: {fileID: 5903031571917218376, guid: 6a996e846c90cf1409094a6cca9f9943, type: 3}
+--- !u!114 &-4583430984408040784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4049526037562052016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f8727b929294b448afaa61c5bcf72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4056523175180540241
 GameObject:
   m_ObjectHideFlags: 0

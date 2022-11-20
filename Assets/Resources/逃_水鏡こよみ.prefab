@@ -5306,6 +5306,7 @@ GameObject:
   - component: {fileID: 791036302718152062}
   - component: {fileID: 5058189102029091366}
   - component: {fileID: 111062325095022602}
+  - component: {fileID: -1149267418097449537}
   m_Layer: 0
   m_Name: "\u9003_\u6C34\u93E1\u3053\u3088\u307F"
   m_TagString: Nigeru
@@ -5540,6 +5541,18 @@ MonoBehaviour:
   animSpeed: 1
   Nokori_Player: 3
   particleSystem: {fileID: 5903031571917218376, guid: 6a996e846c90cf1409094a6cca9f9943, type: 3}
+--- !u!114 &-1149267418097449537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829568226418256726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f8727b929294b448afaa61c5bcf72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2942947677607023445
 GameObject:
   m_ObjectHideFlags: 0

@@ -2056,6 +2056,7 @@ GameObject:
   - component: {fileID: 8579874479882662401}
   - component: {fileID: 8579874479882662414}
   - component: {fileID: 8579874479882662415}
+  - component: {fileID: 4586461013228016311}
   m_Layer: 0
   m_Name: "\u9B3C_UCAkiTest"
   m_TagString: Oni
@@ -2417,12 +2418,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  camera: {fileID: 0}
   SE:
   - {fileID: 8300000, guid: dd60c8a28a7258f46bb9bc2b9ca4359e, type: 3}
   audioSource: {fileID: 0}
   ps: {fileID: 3208950973572355511, guid: de2c48cf1b1ea48448647f5f6d754073, type: 3}
-  speed: 5
   animSpeed: 1.5
   particleSystem: {fileID: 5903031571917218376, guid: 6a996e846c90cf1409094a6cca9f9943, type: 3}
 --- !u!82 &8579874479882662415
@@ -2521,6 +2520,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4586461013228016311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8579874479882662412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f8727b929294b448afaa61c5bcf72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8579874479885709049
 GameObject:
   m_ObjectHideFlags: 0
@@ -3185,7 +3196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955f385e5c5f6724fb2d373d0d964ea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NickName: {fileID: 0}
 --- !u!1 &8579874480007224672
 GameObject:
   m_ObjectHideFlags: 0
