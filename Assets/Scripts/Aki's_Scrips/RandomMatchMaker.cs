@@ -16,6 +16,8 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using Cinemachine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class RandomMatchMaker : MonoBehaviourPunCallbacks
 {
@@ -25,20 +27,22 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public GameObject[] SpawnPoint;							 //キャラクタースポーンポイント
     private int Number;										//鬼側か逃げる側かを識別するナンバー
     public static bool GameStartFlg = false;//ゲーム開始フラグ
-    public static bool CharacterSpawnFlg =false;
-    public static bool kasu = false;
     bool ConnectFlg = true;
     bool DebugMode = false;
-    public static string Name;
+    int GameStartCount = 5;//メンバーが揃ってからゲーム開始までのカウント(初期値は5秒)
+    GUIStyle style;
+
+    void Start(){
+        style = new GUIStyle();
+        style.fontSize = 300;
+        style.normal.textColor = Color.white;
+    }
 
     void Update() {
         //SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
         if(GoToChooseChara.OnEndEditFlg && ConnectFlg) {
             ConnectFlg = false;
             Connect();
-        }
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 4) {
-            photonView.RPC(nameof(sinekasu),RpcTarget.All);
         }
     }
 
@@ -123,11 +127,23 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers) {
             PhotonNetwork.CurrentRoom.IsOpen = false; //ルームを閉める
             PhotonNetwork.CurrentRoom.IsVisible = false; //ルームを非表示にする
-            GameStartFlg = true;
+            StartCoroutine("GameStart"); //GameStartまでの時間を待つコルーチンを作動
         }
     }
-    [PunRPC]
-    void sinekasu(){
-        GameStartFlg = true; //ゲーム開始フラグをtrueにする
+
+    /// <summary> 5秒間待ってゲームを開始する </summary>
+    IEnumerator GameStart() {
+        for(GameStartCount =5; GameStartCount > 0; GameStartCount--) {
+            yield return new WaitForSeconds(1);
+        }
+        GameStartFlg = true;
+    }
+
+    void OnGUI(){
+        if(!GameStartFlg){
+            GUI.Label(new Rect(1740, 1080, 1000, 1000), GameStartCount.ToString(), style);
+        }else{
+            GUI.Label(new Rect(1740, 1080, 100, 20), "");
+        }
     }
 }
