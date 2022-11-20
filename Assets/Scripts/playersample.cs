@@ -75,16 +75,20 @@ public class playersample : MonoBehaviourPunCallbacks
             return;
         }
         PhotonNetwork.LocalPlayer.NickName = $"{"Player"}({photonView.Owner.ActorNumber})";
-        ItemSpawnTime += Time.deltaTime;
-        if(ItemSpawnTime >= 10.0f){
-            ItemSpawnTime = 0.0f;
-            ItemSpawn();
-        }
+
 		Character_Spawn();
         //ゲーム中かどうか
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
+
+        //アイテムスポーン時間
+        ItemSpawnTime += Time.deltaTime;
+        if(ItemSpawnTime >= 10.0f){
+            ItemSpawnTime = 0.0f;
+            ItemSpawn();
+        }
+        
         if(gameObject.transform.position.y <= -100f){
             SpawnFlg = true;
         }
@@ -92,10 +96,7 @@ public class playersample : MonoBehaviourPunCallbacks
     }
 
     void Character_Spawn(){
-        if(!RandomMatchMaker.GameStartFlg){
-            return;
-        }
-        photonView.RPC(nameof(Game_Now_Update),RpcTarget.All);
+        
         if(!SpawnFlg){
             return;
         }
@@ -120,9 +121,6 @@ public class playersample : MonoBehaviourPunCallbacks
 
     //プレイヤーが勝利した場合の処理
     void Player_Win(){
-        if(!RandomMatchMaker.GameStartFlg){
-            return;
-        }
         isTimeCount(Mathf.FloorToInt(isTimeMaster)); // 時間カウント関数
         if(isTimeMaster <= 0){                                    //残り時間0秒を下回ると
             isTimeMaster = 0;                                     //isTimeMasterに0を代入
@@ -158,7 +156,9 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
-        
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
         inputHorizontal = Input.GetAxisRaw("Horizontal");    //横方向の値を入力
         inputVertical = Input.GetAxisRaw("Vertical");        //縦方向の値を入力
         if(inputHorizontal==0 && inputVertical==0){
@@ -213,6 +213,7 @@ public class playersample : MonoBehaviourPunCallbacks
         #endif
     }
 
+    /// <summary> スピードアップの時間を計測し、一定時間を超えたらスピードを戻す </summary>
     void SpeedUp(){
         SpeedUpTime += Time.deltaTime;
         if(SpeedUpTime >= 5.0f){
@@ -221,7 +222,7 @@ public class playersample : MonoBehaviourPunCallbacks
         }
     }
 
-    // 暫定処理として、10秒経過後に強制的にプログラムを終了する
+    /// <summary>  暫定処理として、10秒経過後に強制的にプログラムを終了する </summary>
     void isExit() {
         isExitCountA += 1;      // 毎フレームカウントアップ
         if(isExitCountA >= 60){ // 60フレーム経過したら
@@ -236,6 +237,7 @@ public class playersample : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary> 自分がマスタークライアントならば、指定の座標にアイテムを出現させる </summary>
     void ItemSpawn(){
         if(PhotonNetwork.LocalPlayer.IsMasterClient){
             for(int i=0; i<4; i++){
@@ -274,8 +276,10 @@ public class playersample : MonoBehaviourPunCallbacks
         Text.text = (isTimeCountA).ToString("00") + ":" + (isTimeCountB).ToString("00") + "." + (isTimeCountC).ToString("000");
     }
 
+    /*
     [PunRPC]
     void Game_Now_Update(){
         RandomMatchMaker.GameStartFlg = true;
     }
+    */
 }

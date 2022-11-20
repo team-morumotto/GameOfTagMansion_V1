@@ -80,16 +80,20 @@ public class oni_sample : MonoBehaviourPunCallbacks
             return;
         }
         PhotonNetwork.LocalPlayer.NickName = $"{"Player"}({photonView.Owner.ActorNumber})";
+        Character_Spawn();
+        
+        //ゲーム中かどうか
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
+        //アイテムスポーン時間
         ItemSpawnTime += Time.deltaTime;
         if(ItemSpawnTime >= 10.0f){
             ItemSpawnTime = 0.0f;
             ItemSpawn();
         }
-        Character_Spawn();
-        //ゲーム中かどうか
-        if(!RandomMatchMaker.GameStartFlg){
-            return;
-        }
+
+        //ステージ外に落ちたときy座標が-100以下になったら自分のスパーン位置に戻る
         if(gameObject.transform.position.y <= -100f){
             SpawnFlg = true;
         }
@@ -109,7 +113,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
-        photonView.RPC(nameof(Game_Now_Update),RpcTarget.All);
+        
         if(!SpawnFlg){
             return;
         }
@@ -176,7 +180,10 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
-        
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
+
         inputHorizontal = Input.GetAxis ("Horizontal");			// 入力デバイスの水平軸をhで定義
         inputVertical = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
         if(inputHorizontal==0 && inputVertical==0){
@@ -303,9 +310,10 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Text.text = (isTimeCountA).ToString("00") + ":" + (isTimeCountB).ToString("00") + "." + (isTimeCountC).ToString("000");
     }
 
+    /*
     [PunRPC]
     void Game_Now_Update(){
         RandomMatchMaker.GameStartFlg = true;
     }
-
+    */
 }
