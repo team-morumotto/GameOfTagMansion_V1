@@ -323,6 +323,8 @@ public class playersample : MonoBehaviourPunCallbacks
         }
         CountFlg = true;
         GUIFlg = false;
+        var BGMObject = GameObject.Find("BGM");
+        BGMObject.GetComponent<AudioSource>().Play();
     }
 
     private void OnGUI() {
