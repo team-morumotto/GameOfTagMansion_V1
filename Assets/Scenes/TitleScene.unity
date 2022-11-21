@@ -6416,12 +6416,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1954315020}
+      - m_Target: {fileID: 1254890386}
         m_TargetAssemblyTypeName: SetFirstButton, Assembly-CSharp
         m_MethodName: InitButtonSet
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1166473438}
+          m_ObjectArgument: {fileID: 1616248308}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -7197,7 +7197,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 0.759434, g: 1, b: 0.99238735, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.24875402, g: 0.7658479, b: 0.8113208, a: 1}
@@ -9994,7 +9994,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 0.8726415, b: 0.8726415, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.24875402, g: 0.7658479, b: 0.8113208, a: 1}
@@ -10046,7 +10046,7 @@ MonoBehaviour:
         m_MethodName: InitButtonSet
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 843052920}
+          m_ObjectArgument: {fileID: 1830325391}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -10556,6 +10556,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 725142514}
+        m_TargetAssemblyTypeName: SetFirstButton, Assembly-CSharp
+        m_MethodName: InitButtonSet
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1199173060}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
