@@ -27,16 +27,9 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public GameObject[] SpawnPoint;							 //キャラクタースポーンポイント
     private int Number;										//鬼側か逃げる側かを識別するナンバー
     public static bool GameStartFlg = false;//ゲーム開始フラグ
+    public static bool GameStartWaitFlg = false;//ゲーム開始待機フラグ
     bool ConnectFlg = true;
     bool DebugMode = false;
-    int GameStartCount = 5;//メンバーが揃ってからゲーム開始までのカウント(初期値は5秒)
-    GUIStyle style;
-
-    void Start(){
-        style = new GUIStyle();
-        style.fontSize = 300;
-        style.normal.textColor = Color.white;
-    }
 
     void Update() {
         //SetNameスクリプトの名前入力後フラグがtrueになったらConnect関数を実行
@@ -78,7 +71,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message) {
         // ランダムで参加できるルームが存在しないなら、新規でルームを作成する
         RoomOptions roomOptions = new RoomOptions();	         //ルームをインスタンス化
-        roomOptions.MaxPlayers = 1;//ルームの最大人数を設定(intをbyteにキャスト)
+        roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)
         PhotonNetwork.CreateRoom(null,roomOptions);              //ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
 
@@ -87,13 +80,13 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         if(DebugMode){
             RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
             roomOptions.IsVisible = false;
-            roomOptions.MaxPlayers = 1;//ルームの最大人数を設定(intをbyteにキャスト)
+            roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)
 
             PhotonNetwork.CreateRoom(oni_sample.RoomTest , roomOptions);	//ルームを作成
         }
         else{
             RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
-            roomOptions.MaxPlayers = 1;//ルームの最大人数を設定(intをbyteにキャスト)						//ルーム接続の最大人数
+            roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)						//ルーム接続の最大人数
 
             PhotonNetwork.CreateRoom(null, roomOptions);	//ルームを作成
         }
@@ -123,27 +116,18 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
                 PivotColliderController.PlayerObj = Oni;//Player(自分)のオブジェクトをPlayerObjに代入
                 break;
         }
+        GameStartFlg = false;
+        GameStartWaitFlg = false;
 		//ルームに入室している人数がルームの最大人数になったら
         if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers) {
             PhotonNetwork.CurrentRoom.IsOpen = false; //ルームを閉める
             PhotonNetwork.CurrentRoom.IsVisible = false; //ルームを非表示にする
-            StartCoroutine("GameStart"); //GameStartまでの時間を待つコルーチンを作動
+            GameStartFlg =true; //ゲーム開始待機フラグを立てる
         }
     }
 
-    /// <summary> 5秒間待ってゲームを開始する </summary>
-    IEnumerator GameStart() {
-        for(GameStartCount =5; GameStartCount > 0; GameStartCount--) {
-            yield return new WaitForSeconds(1);
-        }
-        GameStartFlg = true;
-    }
-
-    void OnGUI(){
-        if(!GameStartFlg){
-            GUI.Label(new Rect(1740, 1080, 1000, 1000), GameStartCount.ToString(), style);
-        }else{
-            GUI.Label(new Rect(1740, 1080, 100, 20), "");
-        }
+    [PunRPC]
+    void Game_Now_Update(){
+        RandomMatchMaker.GameStartFlg = true;
     }
 }

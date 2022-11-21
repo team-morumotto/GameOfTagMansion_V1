@@ -2424,6 +2424,7 @@ MonoBehaviour:
   ps: {fileID: 3208950973572355511, guid: de2c48cf1b1ea48448647f5f6d754073, type: 3}
   animSpeed: 1.5
   particleSystem: {fileID: 5903031571917218376, guid: 6a996e846c90cf1409094a6cca9f9943, type: 3}
+  CountDownClip: {fileID: 8300000, guid: 16cbd4f2f8fe32a4bb2ed9eb43d4a8f2, type: 3}
 --- !u!82 &8579874479882662415
 AudioSource:
   m_ObjectHideFlags: 0

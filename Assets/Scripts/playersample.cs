@@ -2,6 +2,8 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Collections;
 
 public class playersample : MonoBehaviourPunCallbacks
 {
@@ -40,6 +42,14 @@ public class playersample : MonoBehaviourPunCallbacks
 
     //#### ここまで変数置き場 ####//
 
+    int GameStartCount = 5;//メンバーが揃ってからゲーム開始までのカウント(初期値は5秒)
+    GUIStyle style;//GUIのスタイル
+    public AudioClip CountDownClip;
+    AudioSource audio;
+    bool GUIFlg = false;
+    bool CoroutineFlg = true;
+    bool CountFlg = true;
+
     void Start () {
         // カウント系の処理
         isExitCountMax = 10;								                // Exitカウントの最大秒数
@@ -68,6 +78,12 @@ public class playersample : MonoBehaviourPunCallbacks
         ItamSpawnPoint[3] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("ItemSpawnPoint_03").gameObject;
 
         particleSystem = mainCamera.transform.Find("Particle System").gameObject.GetComponent<ParticleSystem>();
+
+        audio = GetComponent<AudioSource>();
+
+        style = new GUIStyle();
+        style.fontSize = 300;
+        style.normal.textColor = Color.white;
     }
 
     void Update () {
@@ -75,10 +91,20 @@ public class playersample : MonoBehaviourPunCallbacks
             return;
         }
         PhotonNetwork.LocalPlayer.NickName = $"{"Player"}({photonView.Owner.ActorNumber})";
-
 		Character_Spawn();
+
         //ゲーム中かどうか
         if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
+
+        if(CoroutineFlg){
+            CoroutineFlg = false;
+            StartCoroutine("GameStart");
+        }
+
+        photonView.RPC(nameof(Game_Now_Update), RpcTarget.All);
+        if(!CountFlg){
             return;
         }
 
@@ -89,6 +115,7 @@ public class playersample : MonoBehaviourPunCallbacks
             ItemSpawn();
         }
         
+         //ステージ外に落ちたときy座標が-100以下になったら自分のスパーン位置に戻る
         if(gameObject.transform.position.y <= -100f){
             SpawnFlg = true;
         }
@@ -96,10 +123,14 @@ public class playersample : MonoBehaviourPunCallbacks
     }
 
     void Character_Spawn(){
-        
         if(!SpawnFlg){
             return;
         }
+
+        if(!RandomMatchMaker.GameStartFlg){
+            return;
+        }
+
         SpawnFlg = false;//以下の関数内の処理を一回だけ行うための処理
 
         var actor = photonView.Owner.ActorNumber;//ルームに入ってきたプレイヤーの入室順番号を入手
@@ -156,9 +187,10 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
-        if(!RandomMatchMaker.GameStartFlg){
+        if(!CountFlg){
             return;
         }
+
         inputHorizontal = Input.GetAxisRaw("Horizontal");    //横方向の値を入力
         inputVertical = Input.GetAxisRaw("Vertical");        //縦方向の値を入力
         if(inputHorizontal==0 && inputVertical==0){
@@ -276,10 +308,28 @@ public class playersample : MonoBehaviourPunCallbacks
         Text.text = (isTimeCountA).ToString("00") + ":" + (isTimeCountB).ToString("00") + "." + (isTimeCountC).ToString("000");
     }
 
-    /*
     [PunRPC]
     void Game_Now_Update(){
         RandomMatchMaker.GameStartFlg = true;
     }
-    */
+
+    /// <summary> 5秒間待ってゲームを開始する </summary>
+    IEnumerator GameStart() {
+        audio.PlayOneShot(CountDownClip); //カウントダウンの音を鳴らす
+        CountFlg = false;
+        for(GameStartCount = 5; GameStartCount > 0; GameStartCount--) {
+            GUIFlg = true;
+            yield return new WaitForSeconds(1);
+        }
+        CountFlg = true;
+        GUIFlg = false;
+    }
+
+    private void OnGUI() {
+        if(GUIFlg){
+            GUI.Label(new Rect(1740, 1080, 1000, 1000), GameStartCount.ToString(), style);
+        }else{
+            GUI.Label(new Rect(1740, 1080, 100, 20), "");
+        }
+    }
 }

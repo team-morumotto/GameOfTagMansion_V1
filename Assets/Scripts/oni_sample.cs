@@ -43,6 +43,13 @@ public class oni_sample : MonoBehaviourPunCallbacks
     [SerializeField] ParticleSystem particleSystem; // パーティクルシステムを取得
     
     //#### ここまで変数置き場 ####//
+     int GameStartCount = 5;//メンバーが揃ってからゲーム開始までのカウント(初期値は5秒)
+    GUIStyle style;//GUIのスタイル
+    public AudioClip CountDownClip;
+    AudioSource audio;
+    bool GUIFlg = false;
+    bool CoroutineFlg = true;
+    bool CountFlg = true;
     void Start(){
         // カウント系の処理
         isExitCountMax = 10;								                // Exitカウントの最大秒数
@@ -73,6 +80,12 @@ public class oni_sample : MonoBehaviourPunCallbacks
         ItamSpawnPoint[3] = GameObject.Find(MasterConfig.SpawnWorld).transform.Find("ItemSpawnPoint_03").gameObject;
 
         particleSystem = mainCamera.transform.Find("Particle System").gameObject.GetComponent<ParticleSystem>();
+        
+        audio = GetComponent<AudioSource>();
+
+        style = new GUIStyle();
+        style.fontSize = 300;
+        style.normal.textColor = Color.white;
     }
 
     void Update(){
@@ -86,6 +99,17 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
+
+        if(CoroutineFlg){
+            CoroutineFlg = false;
+            StartCoroutine("GameStart");
+        }
+        
+        photonView.RPC(nameof(Game_Now_Update), RpcTarget.All);
+        if(!CountFlg){
+            return;
+        }
+
         //アイテムスポーン時間
         ItemSpawnTime += Time.deltaTime;
         if(ItemSpawnTime >= 10.0f){
@@ -104,16 +128,17 @@ public class oni_sample : MonoBehaviourPunCallbacks
             result_text.text = "全員捕まえられなかった...";
             Oni_Game_End();
         }
-        if(PhotonNetwork.PlayerList.Length==1){
+        if(PhotonNetwork.PlayerList.Length==1 && RandomMatchMaker.GameStartFlg){
             result_text.text = "全員捕まえられた！";
             Oni_Game_End();
         }
     }
+
     void Character_Spawn(){
         if(!RandomMatchMaker.GameStartFlg){
             return;
         }
-        
+
         if(!SpawnFlg){
             return;
         }
@@ -180,7 +205,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
-        if(!RandomMatchMaker.GameStartFlg){
+        if(!CountFlg){
             return;
         }
 
@@ -310,10 +335,28 @@ public class oni_sample : MonoBehaviourPunCallbacks
         Text.text = (isTimeCountA).ToString("00") + ":" + (isTimeCountB).ToString("00") + "." + (isTimeCountC).ToString("000");
     }
 
-    /*
     [PunRPC]
     void Game_Now_Update(){
         RandomMatchMaker.GameStartFlg = true;
     }
-    */
+
+    /// <summary> 5秒間待ってゲームを開始する </summary>
+    IEnumerator GameStart() {
+        audio.PlayOneShot(CountDownClip); //カウントダウンの音を鳴らす
+        CountFlg = false;
+        for(GameStartCount = 5; GameStartCount > 0; GameStartCount--) {
+            GUIFlg = true;
+            yield return new WaitForSeconds(1);
+        }
+        CountFlg = true;
+        GUIFlg = false;
+    }
+
+    private void OnGUI() {
+        if(GUIFlg){
+            GUI.Label(new Rect(1740, 1080, 1000, 1000), GameStartCount.ToString(), style);
+        }else{
+            GUI.Label(new Rect(1740, 1080, 100, 20), "");
+        }
+    }
 }
