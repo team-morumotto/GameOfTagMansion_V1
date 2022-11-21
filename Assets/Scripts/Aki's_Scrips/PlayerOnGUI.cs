@@ -7,14 +7,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerOnGUI : MonoBehaviour
+public class PlayerOnGUI : MonoBehaviourPunCallbacks
 {
     private GUIStyle ControlStyle,SpeedUpStyle;//操作とスピードアップで使用するGUIStyle
     private float PlayerRun = 10;//プレイヤーが走っているときの速度
 
 	void Start()
 	{
+        if(!photonView.IsMine) return;//自分のオブジェクトでなければ処理を行わない
 		ControlStyle = new GUIStyle();//操作説明のGUIStyle
         SpeedUpStyle = new GUIStyle();//スピードアップのGUIStyle
         //どちらもフォントサイズを20に設定
@@ -24,6 +26,7 @@ public class PlayerOnGUI : MonoBehaviour
 	}
 
     void Update(){
+        if(!photonView.IsMine) return;//自分のオブジェクトでなければ処理を行わない
         //プレイヤーの移動速度がスピードアップ状態の時
         if(playersample.moveSpeed == PlayerRun){
             StartCoroutine(Text_Color_Frash());
@@ -38,10 +41,11 @@ public class PlayerOnGUI : MonoBehaviour
     }
 
     void OnGUI(){
+        if(!photonView.IsMine){return;}
         GUI.Label(new Rect(0,560,500,400),"・左スティックで移動",ControlStyle);
         GUI.Label(new Rect(200,560,500,400),"・右スティックでカメラ操作",ControlStyle);
         if(playersample.moveSpeed == PlayerRun){
-            GUI.Label(new Rect(250,100,500,400),"スピードアップ中！！",SpeedUpStyle);
+            GUI.Label(new Rect(500,300,500,400),"スピードアップ中！！",SpeedUpStyle);
         }else{
             GUI.Label(new Rect(250,100,500,400),"",ControlStyle);
         }

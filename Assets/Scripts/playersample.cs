@@ -321,6 +321,7 @@ public class playersample : MonoBehaviourPunCallbacks
             GUIFlg = true;
             yield return new WaitForSeconds(1);
         }
+        
         CountFlg = true;
         GUIFlg = false;
     }

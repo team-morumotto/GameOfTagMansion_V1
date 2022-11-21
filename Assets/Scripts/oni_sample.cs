@@ -231,10 +231,10 @@ public class oni_sample : MonoBehaviourPunCallbacks
         // 方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
 
-        //時間が15秒以下の時に速度を上げる
+        //時間が30秒以下の時に速度を上げる
         float nowspeed;
         //初回
-        if(isTimeMaster < 15f&&isSpeedUpStart == false){
+        if(isTimeMaster < 30f&&isSpeedUpStart == false){
             nowspeed = speed * 2;
             ps = GameObject.Find("Particle System").GetComponent<ParticleSystem>();
             ps.transform.localPosition = this.transform.position;
