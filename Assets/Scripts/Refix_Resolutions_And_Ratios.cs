@@ -6,7 +6,12 @@ public class Refix_Resolutions_And_Ratios : MonoBehaviour {
     [SerializeField]
     private Vector2 aspectVec; //目的解像度
 
-    Camera camera = Camera.main; //カメラ情報を取得
+    Camera camera;
+
+    void Start () {
+        //カメラのアスペクト比を設定
+        camera = Camera.main;//カメラ情報を取得
+    }
 
     private void Update() {
         fixAspectRatio();

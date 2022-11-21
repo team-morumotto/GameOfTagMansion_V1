@@ -15,8 +15,7 @@ public class playersample : MonoBehaviourPunCallbacks
     public GameObject[] ItamSpawnPoint;//アイテムのステージスポーンポイント
     public CinemachineFreeLook CameraFreeLook; //カメラのFreeLook
     public CinemachineCollider CameraCollider; //カメラのFreeLook
-    public AudioClip[] SE; 
-
+    public AudioClip[] SE;
     //## Character系の変数 ##//
     private Rigidbody rb;
     private Animator anim;
@@ -25,7 +24,11 @@ public class playersample : MonoBehaviourPunCallbacks
     float inputHorizontal;
     float inputVertical;
     private float SpeedUpTime;//アイテム取得時のスピードアップ時間
-    public static float moveSpeed = 5.0f;
+    public static float moveSpeed = 5.0f;//移動速度
+    bool GUIFlg = false;//GUIを表示する間のフラグ
+    bool CoroutineFlg = true;//コルーチンを一度だけ実行するためのフラグ
+    bool CountFlg = true;//カウントダウン中は操作を受け付けないようにするためのフラグ
+    GUIStyle style;//GUIのスタイル
 
     //## ワールド等外部的変数 ##//
 	bool SpawnFlg = true;
@@ -40,16 +43,13 @@ public class playersample : MonoBehaviourPunCallbacks
     private int isTimeCountC = 0;		// 時計のミリ秒カウント(1000ms基準)
     [SerializeField] ParticleSystem particleSystem; // パーティクルシステムを取得
     public static bool isPlayerLose = false; // ゲーム終了フラグ
+    int GameStartCount = 5;//メンバーが揃ってからゲーム開始までのカウント(初期値は5秒)
+    public AudioClip CountDownClip;//カウントダウンのジングル
+    AudioSource audio;//オーディオソース
 
     //#### ここまで変数置き場 ####//
 
-    int GameStartCount = 5;//メンバーが揃ってからゲーム開始までのカウント(初期値は5秒)
-    GUIStyle style;//GUIのスタイル
-    public AudioClip CountDownClip;
-    AudioSource audio;
-    bool GUIFlg = false;
-    bool CoroutineFlg = true;
-    bool CountFlg = true;
+
 
     void Start () {
         // カウント系の処理
@@ -172,6 +172,18 @@ public class playersample : MonoBehaviourPunCallbacks
             Player_Lose();
         }
     }
+
+    void OnTriggerEnter(Collider other){
+        if(!photonView.IsMine){
+            return;
+        }
+        if(other.gameObject.tag == "Item"){
+            moveSpeed = 10.0f;
+            Destroy(other.gameObject);
+            OutSE(0);
+        }
+    }
+
     //プレイヤーが敗北した場合の処理
     public void Player_Lose() {
         //捕まったとき
@@ -192,21 +204,25 @@ public class playersample : MonoBehaviourPunCallbacks
             return;
         }
 
-        inputHorizontal = Input.GetAxisRaw("Horizontal");    //横方向の値を入力
-        inputVertical = Input.GetAxisRaw("Vertical");        //縦方向の値を入力
+        inputHorizontal = Input.GetAxisRaw("Horizontal");  //横方向の値を入力
+        inputVertical = Input.GetAxisRaw("Vertical");      //縦方向の値を入力
         if(inputHorizontal==0 && inputVertical==0){
-            anim.SetFloat ("Speed", 0f);                      //プレイヤーが移動してないときは走るアニメーションを止める
+            anim.SetFloat ("Speed", 0f);                   //プレイヤーが移動してないときは走るアニメーションを止める
         }else{
             if(moveSpeed == 10.0f){
-                SpeedUp();//スピードアップの時間を計測し、一定時間を超えたらスピードを戻す.
-                particleSystem.Play(); //パーティクルシステムをスタート
+                particleSystem.Play();                         //パーティクルシステムをスタート
                 anim.SetFloat("AnimSpeed", 1.5f);
             }else{
-                particleSystem.Stop(); //パーティクルシステムをストップ
+                particleSystem.Stop();                         //パーティクルシステムをストップ
                 anim.SetFloat("AnimSpeed", 1.0f);
             }
-            anim.SetFloat ("Speed", 1f);                     //プレイヤーが移動しているときは走るアニメーションを再生する
+            anim.SetFloat ("Speed", 1.0f);                     //プレイヤーが移動しているときは走るアニメーションを再生する
         }
+
+        if(moveSpeed == 10.0f){
+               SpeedUp();                                     //スピードアップの時間を計測し、一定時間を超えたらスピードを戻す.
+        }
+
 
         anim.speed = animSpeed;
         currentBaseState = anim.GetCurrentAnimatorStateInfo (0);

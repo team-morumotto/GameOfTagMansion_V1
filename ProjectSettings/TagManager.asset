@@ -9,6 +9,7 @@ TagManager:
   - Nigeru
   - Oni
   - PlayerInputManager
+  - Item
   layers:
   - Default
   - TransparentFX

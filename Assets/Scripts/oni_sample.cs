@@ -184,6 +184,17 @@ public class oni_sample : MonoBehaviourPunCallbacks
         StartCoroutine("textwait",5f);
     }
 
+    void OnTriggerEnter(Collider other){
+        if(!photonView.IsMine){
+            return;
+        }
+        if(other.gameObject.tag == "Item"){
+            speed = 13.0f;
+            Destroy(other.gameObject);
+            OutSE(1);
+        }
+    }
+
     //五秒たったらテキストを非表示にする
     IEnumerator textwait(float time)
     {
@@ -215,7 +226,6 @@ public class oni_sample : MonoBehaviourPunCallbacks
             anim.SetFloat ("Speed", 0f);                      //プレイヤーが移動してないときは走るアニメーションを止める
         }else{
             if(speed > 10.0f){
-                SpeedUp();//スピードアップの時間を計測し、一定時間を超えたらスピードを戻す.
                 particleSystem.Play(); //パーティクルシステムをスタート
                 anim.SetFloat("AnimSpeed", 1.5f);
             }else{
@@ -223,6 +233,10 @@ public class oni_sample : MonoBehaviourPunCallbacks
                 anim.SetFloat("AnimSpeed", 1.0f);
             }
             anim.SetFloat ("Speed", 1f);                     //プレイヤーが移動しているときは走るアニメーションを再生する
+        }
+
+        if(speed > 10.0f){
+            SpeedUp();//スピードアップの時間を計測し、一定時間を超えたらスピードを戻す.
         }
 
         // カメラの方向から、X-Z平面の単位ベクトルを取得
