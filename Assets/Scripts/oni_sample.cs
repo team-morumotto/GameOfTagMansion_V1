@@ -361,4 +361,8 @@ public class oni_sample : MonoBehaviourPunCallbacks
             GUI.Label(new Rect(1740, 1080, 100, 20), "");
         }
     }
+
+    public void OutSE(int SEnumber){
+        audio.PlayOneShot(SE[SEnumber]);
+    }
 }
