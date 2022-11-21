@@ -71,7 +71,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message) {
         // ランダムで参加できるルームが存在しないなら、新規でルームを作成する
         RoomOptions roomOptions = new RoomOptions();	         //ルームをインスタンス化
-        roomOptions.MaxPlayers = 1;//ルームの最大人数を設定(intをbyteにキャスト)
+        roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)
         PhotonNetwork.CreateRoom(null,roomOptions);              //ルームを作成(ルームの名前を指定しない場合はnullを指定)
     }
 
@@ -80,13 +80,13 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         if(DebugMode){
             RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
             roomOptions.IsVisible = false;
-            roomOptions.MaxPlayers = 1;//ルームの最大人数を設定(intをbyteにキャスト)
+            roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)
 
             PhotonNetwork.CreateRoom(oni_sample.RoomTest , roomOptions);	//ルームを作成
         }
         else{
             RoomOptions roomOptions = new RoomOptions();	//ルームをインスタンス化
-            roomOptions.MaxPlayers = 1;//ルームの最大人数を設定(intをbyteにキャスト)						//ルーム接続の最大人数
+            roomOptions.MaxPlayers = (byte)RoomPlayerSet.GamePlayers;//ルームの最大人数を設定(intをbyteにキャスト)						//ルーム接続の最大人数
 
             PhotonNetwork.CreateRoom(null, roomOptions);	//ルームを作成
         }
