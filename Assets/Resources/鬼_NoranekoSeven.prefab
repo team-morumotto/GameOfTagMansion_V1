@@ -3664,6 +3664,7 @@ MonoBehaviour:
   - {fileID: 0}
   SE:
   - {fileID: 8300000, guid: dd60c8a28a7258f46bb9bc2b9ca4359e, type: 3}
+  - {fileID: 8300000, guid: 260d17fc3d3c5424a837af6a2a524414, type: 3}
   audioSource: {fileID: 0}
   ps: {fileID: 0}
   animSpeed: 1.5

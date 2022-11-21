@@ -15,6 +15,7 @@ public class playersample : MonoBehaviourPunCallbacks
     public GameObject[] ItamSpawnPoint;//アイテムのステージスポーンポイント
     public CinemachineFreeLook CameraFreeLook; //カメラのFreeLook
     public CinemachineCollider CameraCollider; //カメラのFreeLook
+    public AudioClip[] SE; 
 
     //## Character系の変数 ##//
     private Rigidbody rb;
@@ -334,5 +335,8 @@ public class playersample : MonoBehaviourPunCallbacks
         }else{
             GUI.Label(new Rect(1740, 1080, 100, 20), "");
         }
+    }
+    public void OutSE(int SEnumber){
+        audio.PlayOneShot(SE[SEnumber]);
     }
 }
