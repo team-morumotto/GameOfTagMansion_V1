@@ -13,6 +13,7 @@ public class PlayerOnGUI : MonoBehaviourPunCallbacks
 {
     private GUIStyle ControlStyle,SpeedUpStyle;//操作とスピードアップで使用するGUIStyle
     private float PlayerRun = 10;//プレイヤーが走っているときの速度
+    private float OniRun = 13.0f;//おにが走っているときの速度
 
 	void Start()
 	{
@@ -20,8 +21,8 @@ public class PlayerOnGUI : MonoBehaviourPunCallbacks
 		ControlStyle = new GUIStyle();//操作説明のGUIStyle
         SpeedUpStyle = new GUIStyle();//スピードアップのGUIStyle
         //どちらもフォントサイズを20に設定
-		ControlStyle.fontSize = 40;
-        SpeedUpStyle.fontSize = 100;
+		ControlStyle.fontSize = 30;
+        SpeedUpStyle.fontSize = 80;
         ControlStyle.normal.textColor = Color.white;//操作説明GUIのフォントの色を白に設定
 	}
 
@@ -42,10 +43,10 @@ public class PlayerOnGUI : MonoBehaviourPunCallbacks
 
     void OnGUI(){
         if(!photonView.IsMine){return;}
-        GUI.Label(new Rect(0,560,500,400),"・左スティックで移動",ControlStyle);
-        GUI.Label(new Rect(0,600,500,400),"・右スティックでカメラ操作",ControlStyle);
-        if(playersample.moveSpeed == PlayerRun){
-            GUI.Label(new Rect(1500,300,500,400),"スピードアップ中！！",SpeedUpStyle);
+        GUI.Label(new Rect(0,950,500,400),"・左スティックで移動",ControlStyle);
+        GUI.Label(new Rect(0,1000,500,400),"・右スティックでカメラ操作",ControlStyle);
+        if(playersample.moveSpeed == PlayerRun || oni_sample.speed == OniRun ){
+            GUI.Label(new Rect(480,300,500,400),"スピードアップ中！！",SpeedUpStyle);
         }else{
             GUI.Label(new Rect(250,100,500,400),"",ControlStyle);
         }

@@ -168,6 +168,10 @@ public class playersample : MonoBehaviourPunCallbacks
         if(!photonView.IsMine){
             return;
         }
+        if(!RandomMatchMaker.GameStartFlg){//ゲームスタート後じゃないと動かない
+            return;
+        }
+
         if(collision.gameObject.GetComponent<oni_sample>()){
             Player_Lose();
         }

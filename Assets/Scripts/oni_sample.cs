@@ -169,6 +169,13 @@ public class oni_sample : MonoBehaviourPunCallbacks
     }
 
     void OnCollisionEnter(Collision col){
+        if(!photonView.IsMine){
+            return;
+        }
+        if(!RandomMatchMaker.GameStartFlg){//ゲームスタート後じゃないと動かない
+            return;
+        }
+
         if(col.gameObject.GetComponent<PhotonView>() == false){
             return;
         }
