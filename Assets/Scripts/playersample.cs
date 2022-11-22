@@ -183,7 +183,6 @@ public class playersample : MonoBehaviourPunCallbacks
         }
         if(other.gameObject.tag == "Item"){
             moveSpeed = 10.0f;
-            PhotonNetwork.Destroy(other.gameObject);
             OutSE(0);
         }
     }

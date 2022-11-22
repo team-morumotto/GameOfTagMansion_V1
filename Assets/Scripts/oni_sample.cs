@@ -197,7 +197,6 @@ public class oni_sample : MonoBehaviourPunCallbacks
         }
         if(other.gameObject.tag == "Item"){
             speed = 13.0f;
-            PhotonNetwork.Destroy(other.gameObject);
             OutSE(1);
         }
     }
@@ -297,6 +296,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
             }
         }
     }
+
     //スピードアップの時間を計測し、一定時間を超えたらスピードを戻す.
     void SpeedUp(){
         SpeedUpTime += Time.deltaTime;
