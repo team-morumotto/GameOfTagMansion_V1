@@ -190,7 +190,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         }
         if(other.gameObject.tag == "Item"){
             speed = 13.0f;
-            Destroy(other.gameObject);
+            PhotonNetwork.Destroy(other.gameObject);
             OutSE(1);
         }
     }
