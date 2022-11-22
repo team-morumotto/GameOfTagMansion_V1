@@ -29,7 +29,7 @@ public class PlayerOnGUI : MonoBehaviourPunCallbacks
     void Update(){
         if(!photonView.IsMine) return;//自分のオブジェクトでなければ処理を行わない
         //プレイヤーの移動速度がスピードアップ状態の時
-        if(playersample.moveSpeed == PlayerRun){
+        if(playersample.moveSpeed == PlayerRun || oni_sample.speed == OniRun){
             StartCoroutine(Text_Color_Frash());
         }
     }
@@ -43,8 +43,9 @@ public class PlayerOnGUI : MonoBehaviourPunCallbacks
 
     void OnGUI(){
         if(!photonView.IsMine){return;}
-        GUI.Label(new Rect(0,950,500,400),"・左スティックで移動",ControlStyle);
-        GUI.Label(new Rect(0,1000,500,400),"・右スティックでカメラ操作",ControlStyle);
+        GUI.Label(new Rect(0,800,500,400),"・左スティックで移動",ControlStyle);
+        GUI.Label(new Rect(0,850,500,400),"・右スティックでカメラ操作",ControlStyle);
+        GUI.Label(new Rect(0,900,500,400),"・アイテムをとるとスピードアップ",ControlStyle);
         if(playersample.moveSpeed == PlayerRun || oni_sample.speed == OniRun ){
             GUI.Label(new Rect(480,300,500,400),"スピードアップ中！！",SpeedUpStyle);
         }else{

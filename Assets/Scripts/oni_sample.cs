@@ -255,14 +255,14 @@ public class oni_sample : MonoBehaviourPunCallbacks
         float nowspeed;
         //初回
         if(isTimeMaster < 30f&&isSpeedUpStart == false){
-            nowspeed = speed * 2;
+            nowspeed = speed * 1.3f;
             ps = GameObject.Find("Particle System").GetComponent<ParticleSystem>();
             ps.transform.localPosition = this.transform.position;
             isSpeedUpStart = true;
         }
         //初回以外
         else if(isSpeedUpStart == true){
-            nowspeed = speed * 2;
+            nowspeed = speed * 1.3f;
             ps.transform.localPosition = this.transform.position;
             ps.transform.localRotation = this.transform.localRotation;
         }
