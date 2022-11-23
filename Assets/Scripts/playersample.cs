@@ -244,16 +244,6 @@ public class playersample : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]
-    void Catch_RPC(string p,GameObject g){
-        if(!RandomMatchMaker.GameStartFlg){
-            return;
-        }
-        if(p==PhotonNetwork.NickName){
-            g.GetComponent<playersample>().Player_Lose();
-        }
-    }
-
     void OutAfterDelay(){
         //エディタの場合
         #if UNITY_EDITOR
