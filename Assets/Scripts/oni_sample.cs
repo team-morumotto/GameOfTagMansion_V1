@@ -131,8 +131,9 @@ public class oni_sample : MonoBehaviourPunCallbacks
             result_text.text = "全員捕まえられなかった...";
             Oni_Game_End();
         }
-        if(PhotonNetwork.PlayerList.Length==1 && RandomMatchMaker.GameStartFlg && kFlg==PhotonNetwork.PlayerList.Length-1){
+        if(PhotonNetwork.PlayerList.Length==1 && RandomMatchMaker.GameStartFlg){
             result_text.text = "全員捕まえられた！";
+            Debug.Log(kFlg);
             Oni_Game_End();
         }
     }
