@@ -50,6 +50,8 @@ public class oni_sample : MonoBehaviourPunCallbacks
     bool GUIFlg = false;
     bool CoroutineFlg = true;
     bool CountFlg = true;
+    
+    int kFlg=0;
     void Start(){
         // カウント系の処理
         isExitCountMax = 10;								                // Exitカウントの最大秒数
@@ -86,6 +88,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
         style = new GUIStyle();
         style.fontSize = 300;
         style.normal.textColor = Color.white;
+
     }
 
     void Update(){
@@ -128,7 +131,7 @@ public class oni_sample : MonoBehaviourPunCallbacks
             result_text.text = "全員捕まえられなかった...";
             Oni_Game_End();
         }
-        if(PhotonNetwork.PlayerList.Length==1 && RandomMatchMaker.GameStartFlg){
+        if(PhotonNetwork.PlayerList.Length==1 && RandomMatchMaker.GameStartFlg && kFlg==PhotonNetwork.PlayerList.Length-1){
             result_text.text = "全員捕まえられた！";
             Oni_Game_End();
         }
@@ -179,6 +182,8 @@ public class oni_sample : MonoBehaviourPunCallbacks
         if(col.gameObject.GetComponent<PhotonView>() == false){
             return;
         }
+
+        kFlg++;
 
         var p = col.gameObject.GetComponent<PhotonView>().Owner.NickName;
         if(p == PhotonNetwork.NickName){
